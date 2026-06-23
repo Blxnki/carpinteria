@@ -1,0 +1,21 @@
+---
+import { languages } from '../i18n/ui';
+import { getLangFromUrl } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+---
+
+<div class="flex space-x-2">
+  {Object.entries(languages).map(([code, label]) => (
+    <a
+      href={code === 'es' ? '/' : `/${code}/`}
+      class={`px-2 py-1 text-sm font-medium rounded-md transition-colors ${
+        lang === code
+          ? 'bg-amber-600 text-white'
+          : 'text-stone-600 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-800'
+      }`}
+    >
+      {code.toUpperCase()}
+    </a>
+  ))}
+</div>

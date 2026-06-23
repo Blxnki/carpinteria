@@ -1,0 +1,31 @@
+---
+import { GALLERY_DATA } from "../data/gallery";
+import SectionTitle from "./ui/SectionTitle.astro";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section id="galeria" class="py-20 bg-white dark:bg-stone-950 transition-colors duration-300">
+  <div class="container mx-auto px-4">
+    <SectionTitle
+      title={t('gallery.title')}
+      subtitle={t('gallery.subtitle')}
+    />
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {GALLERY_DATA.map(item => (
+        <div class="group relative overflow-hidden rounded-lg shadow-lg border border-transparent dark:border-stone-800">
+          <img src={item.src} alt={item.alt} class="w-full h-64 object-cover transform transition-transform duration-300 group-hover:scale-110" loading="lazy" />
+          <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+            <div class="text-center text-white">
+              <h3 class="text-lg font-bold">{item.alt}</h3>
+              <p class="text-sm text-stone-300">{item.category}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

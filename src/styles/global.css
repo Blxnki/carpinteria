@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+
+/* Indicar a Tailwind v4 que escuche la clase .dark en el elemento HTML */
+@variant dark (&:where(.dark, .dark *));
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: theme('fontFamily.sans');
+}

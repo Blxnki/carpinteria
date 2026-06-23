@@ -1,0 +1,15 @@
+---
+import { COMPANY_DATA } from '../data/company';
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-stone-100 dark:bg-stone-950 py-8 border-t border-stone-200 dark:border-stone-800 transition-colors duration-300">
+  <div class="container mx-auto px-4 text-center text-stone-600 dark:text-stone-400">
+    <p>&copy; {currentYear} {COMPANY_DATA.name}. {t('footer.rights')}</p>
+    <p class="mt-2">{t('footer.dev')}</p>
+  </div>
+</footer>
