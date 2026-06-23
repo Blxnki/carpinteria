@@ -72,14 +72,14 @@ const t = useTranslations(lang);
   <!-- Fullscreen Lightbox / Modal View -->
   <div
     id="lightbox"
-    class="fixed inset-0 z-50 bg-black/95 flex items-center justify-center hidden opacity-0 transition-opacity duration-300"
+    class="fixed inset-0 z-50 bg-black/95 flex items-center justify-center hidden opacity-0 transition-opacity duration-300 select-none"
     role="dialog"
     aria-modal="true"
   >
     <!-- Close button -->
     <button
       id="lightbox-close"
-      class="absolute top-6 right-6 text-white/70 hover:text-amber-500 transition-colors text-4xl font-light focus:outline-none p-2 z-50"
+      class="absolute top-6 right-6 text-white/70 hover:text-amber-500 transition-colors text-4xl font-light focus:outline-none p-2 z-50 cursor-pointer"
       aria-label="Cerrar visor"
     >
       &times;
@@ -88,28 +88,29 @@ const t = useTranslations(lang);
     <!-- Nav buttons inside Lightbox -->
     <button
       id="lightbox-prev"
-      class="absolute left-4 md:left-8 text-white/70 hover:text-amber-500 transition-colors text-6xl font-extralight focus:outline-none p-4 z-50 select-none"
+      class="absolute left-4 md:left-8 text-white/70 hover:text-amber-500 transition-colors text-6xl font-extralight focus:outline-none p-4 z-50 select-none cursor-pointer hidden md:block"
       aria-label="Imagen anterior"
     >
       &lsaquo;
     </button>
     <button
       id="lightbox-next"
-      class="absolute right-4 md:right-8 text-white/70 hover:text-amber-500 transition-colors text-6xl font-extralight focus:outline-none p-4 z-50 select-none"
+      class="absolute right-4 md:right-8 text-white/70 hover:text-amber-500 transition-colors text-6xl font-extralight focus:outline-none p-4 z-50 select-none cursor-pointer hidden md:block"
       aria-label="Siguiente imagen"
     >
       &rsaquo;
     </button>
 
     <!-- Media and Info Display Box -->
-    <div class="relative max-w-[90vw] max-h-[85vh] flex flex-col items-center justify-center p-4">
+    <div class="relative max-w-[90vw] max-h-[85vh] flex flex-col items-center justify-center p-4 pointer-events-none">
       <img
         id="lightbox-img"
         src=""
         alt=""
-        class="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl border border-stone-900"
+        class="max-w-full max-h-[65vh] object-contain rounded-lg shadow-2xl border border-stone-900 cursor-grab active:cursor-grabbing pointer-events-auto"
+        draggable="false"
       />
-      <div class="text-center mt-4 max-w-xl">
+      <div class="text-center mt-4 max-w-xl select-none pointer-events-none">
         <span id="lightbox-category" class="text-xs text-amber-400 font-bold tracking-wider uppercase mb-1 block"></span>
         <h3 id="lightbox-caption" class="text-white font-serif font-semibold text-lg md:text-xl leading-snug"></h3>
         <p id="lightbox-counter" class="text-xs text-stone-400 mt-2 font-mono"></p>
@@ -148,7 +149,6 @@ const t = useTranslations(lang);
     carousel.addEventListener('mousedown', (e) => {
       isDown = true;
       isDraggingGlobal = false;
-      // Disable snapping and smooth behavior during dragging
       carousel.classList.remove('snap-x', 'snap-mandatory');
       carousel.style.scrollBehavior = 'auto';
       startX = e.pageX - carousel.offsetLeft;
@@ -169,7 +169,6 @@ const t = useTranslations(lang);
         carousel.classList.add('snap-x', 'snap-mandatory');
         carousel.style.scrollBehavior = 'smooth';
         
-        // Timeout to clear drag flag so click events are correctly captured or prevented
         setTimeout(() => {
           isDraggingGlobal = false;
         }, 50);
@@ -243,6 +242,10 @@ const t = useTranslations(lang);
         const alt = itemElement.getAttribute('data-alt') || '';
         const cat = itemElement.getAttribute('data-category') || '';
 
+        // Reset visual transform & transitions dynamically
+        lightboxImg.style.transition = 'none';
+        lightboxImg.style.transform = 'translateX(0) rotate(0) scale(1)';
+
         lightboxImg.src = item.src;
         lightboxImg.alt = alt;
         lightboxCaption.textContent = alt;
@@ -261,10 +264,77 @@ const t = useTranslations(lang);
       updateLightbox();
     };
 
+    // Swipe / Drag Gestures Inside Lightbox
+    let startXTouch = 0;
+    let currentXTouch = 0;
+    let isTouchActive = false;
+    const swipeThreshold = 80; // pixel distance to switch image
+
+    const getXFromEvent = (e: MouseEvent | TouchEvent) => {
+      if ('touches' in e) {
+        return e.touches[0].clientX;
+      }
+      return e.clientX;
+    };
+
+    const handleStartTouch = (e: MouseEvent | TouchEvent) => {
+      if (e.type === 'mousedown') {
+        e.preventDefault(); // Stop default image dragging behaviors
+      }
+      isTouchActive = true;
+      startXTouch = getXFromEvent(e);
+      currentXTouch = startXTouch;
+      lightboxImg.style.transition = 'none';
+    };
+
+    const handleMoveTouch = (e: MouseEvent | TouchEvent) => {
+      if (!isTouchActive) return;
+      currentXTouch = getXFromEvent(e);
+      const diffX = currentXTouch - startXTouch;
+      
+      // Calculate elastic translation and suttle rotation angle (multiplied by 0.04)
+      const rotation = diffX * 0.04;
+      lightboxImg.style.transform = `translateX(${diffX}px) rotate(${rotation}deg) scale(0.98)`;
+    };
+
+    const handleEndTouch = () => {
+      if (!isTouchActive) return;
+      isTouchActive = false;
+
+      const diffX = currentXTouch - startXTouch;
+      
+      // Restore smooth ease transition for returning or switching
+      lightboxImg.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1)';
+      
+      if (diffX > swipeThreshold) {
+        // Drag right -> Prev image
+        prevImage();
+      } else if (diffX < -swipeThreshold) {
+        // Drag left -> Next image
+        nextImage();
+      } else {
+        // Return back to center
+        lightboxImg.style.transform = 'translateX(0) rotate(0) scale(1)';
+      }
+    };
+
+    // Desktop mouse events in lightbox
+    lightboxImg.addEventListener('mousedown', handleStartTouch);
+    document.addEventListener('mousemove', (e) => {
+      if (isTouchActive) handleMoveTouch(e);
+    });
+    document.addEventListener('mouseup', () => {
+      if (isTouchActive) handleEndTouch();
+    });
+
+    // Mobile touch events in lightbox
+    lightboxImg.addEventListener('touchstart', handleStartTouch, { passive: true });
+    lightboxImg.addEventListener('touchmove', handleMoveTouch, { passive: true });
+    lightboxImg.addEventListener('touchend', handleEndTouch);
+
     // Listeners assignment
     galleryItems.forEach((item, index) => {
       item.addEventListener('click', (e) => {
-        // Prevent opening if the click was registered at the end of a dragging action
         if (isDraggingGlobal) {
           e.preventDefault();
           return;

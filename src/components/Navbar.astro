@@ -20,7 +20,14 @@ const navLinks = [
 <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent">
   <div class="container mx-auto px-4">
     <nav class="flex items-center justify-between py-4">
-      <a href={lang === 'es' ? '/' : `/${lang}/`} class="text-2xl font-bold text-stone-900 dark:text-stone-100 transition-colors">{SITE_TITLE}</a>
+      <a href={lang === 'es' ? '/' : `/${lang}/`} class="block transition-transform duration-300 hover:scale-105" aria-label={SITE_TITLE}>
+        <img
+          src="/images/carpinteria/logo.png"
+          alt={SITE_TITLE}
+          class="h-10 md:h-12 w-auto object-contain dark:brightness-110"
+          loading="eager"
+        />
+      </a>
 
       <!-- Desktop Menu -->
       <div class="hidden md:flex items-center space-x-6">
