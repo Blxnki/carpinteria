@@ -14,18 +14,283 @@ const t = useTranslations(lang);
       subtitle={t('gallery.subtitle')}
     />
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {GALLERY_DATA.map(item => (
-        <div class="group relative overflow-hidden rounded-lg shadow-lg border border-transparent dark:border-stone-800">
-          <img src={item.src} alt={item.alt} class="w-full h-64 object-cover transform transition-transform duration-300 group-hover:scale-110" loading="lazy" />
-          <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-            <div class="text-center text-white">
-              <h3 class="text-lg font-bold">{item.alt}</h3>
-              <p class="text-sm text-stone-300">{item.category}</p>
+    <!-- Carousel Wrapper with Relative Arrows -->
+    <div class="relative group/carousel">
+      <!-- Carousel Track Container with Drag Classes -->
+      <div
+        id="gallery-carousel"
+        class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 px-1 cursor-grab select-none active:cursor-grabbing"
+        style="scrollbar-width: none; -ms-overflow-style: none;"
+      >
+        {GALLERY_DATA.map((item, index) => {
+          const altText = t(item.altKey as any);
+          const catText = t(item.categoryKey as any);
+          return (
+            <div
+              class="flex-shrink-0 w-72 sm:w-80 snap-start group relative overflow-hidden rounded-xl shadow-md dark:shadow-stone-950/40 border border-stone-100 dark:border-stone-800/80 cursor-pointer gallery-item transition-all duration-300 hover:shadow-xl"
+              data-index={index}
+              data-alt={altText}
+              data-category={catText}
+            >
+              <!-- Prevent default browser image dragging behaviour -->
+              <img
+                src={item.src}
+                alt={altText}
+                class="w-full h-80 object-cover transform transition-transform duration-700 group-hover:scale-110 pointer-events-none"
+                loading="lazy"
+              />
+              <!-- Dark gradient overlay on hover -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
+                <span class="text-xs text-amber-400 font-bold tracking-wider uppercase mb-1">{catText}</span>
+                <h4 class="text-white font-bold text-lg leading-snug">{altText}</h4>
+              </div>
             </div>
-          </div>
-        </div>
-      ))}
+          );
+        })}
+      </div>
+
+      <!-- Arrow Controls outside for Carousel -->
+      <div class="flex justify-center gap-4 mt-4">
+        <button
+          id="carousel-prev"
+          class="h-12 w-12 flex items-center justify-center rounded-full border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-amber-600 dark:hover:text-amber-500 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500 text-xl font-bold shadow-sm"
+          aria-label="Slide anterior"
+        >
+          &lsaquo;
+        </button>
+        <button
+          id="carousel-next"
+          class="h-12 w-12 flex items-center justify-center rounded-full border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-amber-600 dark:hover:text-amber-500 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500 text-xl font-bold shadow-sm"
+          aria-label="Siguiente slide"
+        >
+          &rsaquo;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Lightbox / Modal View -->
+  <div
+    id="lightbox"
+    class="fixed inset-0 z-50 bg-black/95 flex items-center justify-center hidden opacity-0 transition-opacity duration-300"
+    role="dialog"
+    aria-modal="true"
+  >
+    <!-- Close button -->
+    <button
+      id="lightbox-close"
+      class="absolute top-6 right-6 text-white/70 hover:text-amber-500 transition-colors text-4xl font-light focus:outline-none p-2 z-50"
+      aria-label="Cerrar visor"
+    >
+      &times;
+    </button>
+
+    <!-- Nav buttons inside Lightbox -->
+    <button
+      id="lightbox-prev"
+      class="absolute left-4 md:left-8 text-white/70 hover:text-amber-500 transition-colors text-6xl font-extralight focus:outline-none p-4 z-50 select-none"
+      aria-label="Imagen anterior"
+    >
+      &lsaquo;
+    </button>
+    <button
+      id="lightbox-next"
+      class="absolute right-4 md:right-8 text-white/70 hover:text-amber-500 transition-colors text-6xl font-extralight focus:outline-none p-4 z-50 select-none"
+      aria-label="Siguiente imagen"
+    >
+      &rsaquo;
+    </button>
+
+    <!-- Media and Info Display Box -->
+    <div class="relative max-w-[90vw] max-h-[85vh] flex flex-col items-center justify-center p-4">
+      <img
+        id="lightbox-img"
+        src=""
+        alt=""
+        class="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl border border-stone-900"
+      />
+      <div class="text-center mt-4 max-w-xl">
+        <span id="lightbox-category" class="text-xs text-amber-400 font-bold tracking-wider uppercase mb-1 block"></span>
+        <h3 id="lightbox-caption" class="text-white font-serif font-semibold text-lg md:text-xl leading-snug"></h3>
+        <p id="lightbox-counter" class="text-xs text-stone-400 mt-2 font-mono"></p>
+      </div>
     </div>
   </div>
 </section>
+
+<script>
+  import { GALLERY_DATA } from "../data/gallery";
+
+  // Elements Query
+  const carousel = document.getElementById('gallery-carousel');
+  const prevBtn = document.getElementById('carousel-prev');
+  const nextBtn = document.getElementById('carousel-next');
+
+  // Carousel Buttons Mechanics
+  if (carousel && prevBtn && nextBtn) {
+    prevBtn.addEventListener('click', () => {
+      carousel.style.scrollBehavior = 'smooth';
+      carousel.scrollBy({ left: -340 });
+    });
+    nextBtn.addEventListener('click', () => {
+      carousel.style.scrollBehavior = 'smooth';
+      carousel.scrollBy({ left: 340 });
+    });
+  }
+
+  // Carousel Drag-to-Scroll Mechanics (Desktop & Mouse)
+  let isDown = false;
+  let isDraggingGlobal = false;
+  let startX = 0;
+  let scrollLeft = 0;
+
+  if (carousel) {
+    carousel.addEventListener('mousedown', (e) => {
+      isDown = true;
+      isDraggingGlobal = false;
+      // Disable snapping and smooth behavior during dragging
+      carousel.classList.remove('snap-x', 'snap-mandatory');
+      carousel.style.scrollBehavior = 'auto';
+      startX = e.pageX - carousel.offsetLeft;
+      scrollLeft = carousel.scrollLeft;
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+      if (isDown) {
+        isDown = false;
+        carousel.classList.add('snap-x', 'snap-mandatory');
+        carousel.style.scrollBehavior = 'smooth';
+      }
+    });
+
+    carousel.addEventListener('mouseup', () => {
+      if (isDown) {
+        isDown = false;
+        carousel.classList.add('snap-x', 'snap-mandatory');
+        carousel.style.scrollBehavior = 'smooth';
+        
+        // Timeout to clear drag flag so click events are correctly captured or prevented
+        setTimeout(() => {
+          isDraggingGlobal = false;
+        }, 50);
+      }
+    });
+
+    carousel.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      
+      const x = e.pageX - carousel.offsetLeft;
+      const walk = (x - startX) * 1.5; // Drag speed multiplier
+
+      if (Math.abs(walk) > 5) {
+        isDraggingGlobal = true;
+      }
+      
+      carousel.scrollLeft = scrollLeft - walk;
+    });
+  }
+
+  // Lightbox Mechanics
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+  const lightboxCaption = document.getElementById('lightbox-caption');
+  const lightboxCategory = document.getElementById('lightbox-category');
+  const lightboxCounter = document.getElementById('lightbox-counter');
+  const lightboxClose = document.getElementById('lightbox-close');
+  const lightboxPrev = document.getElementById('lightbox-prev');
+  const lightboxNext = document.getElementById('lightbox-next');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+
+  let currentIndex = 0;
+
+  if (
+    lightbox &&
+    lightboxImg &&
+    lightboxCaption &&
+    lightboxCategory &&
+    lightboxCounter &&
+    lightboxClose &&
+    lightboxPrev &&
+    lightboxNext
+  ) {
+    const openLightbox = (index: number) => {
+      currentIndex = index;
+      updateLightbox();
+      
+      lightbox.classList.remove('hidden');
+      setTimeout(() => {
+        lightbox.classList.add('opacity-100');
+      }, 10);
+      
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeLightbox = () => {
+      lightbox.classList.remove('opacity-100');
+      setTimeout(() => {
+        lightbox.classList.add('hidden');
+      }, 300);
+      
+      document.body.style.overflow = '';
+    };
+
+    const updateLightbox = () => {
+      const item = GALLERY_DATA[currentIndex];
+      const itemElement = galleryItems[currentIndex] as HTMLElement;
+
+      if (item && itemElement) {
+        const alt = itemElement.getAttribute('data-alt') || '';
+        const cat = itemElement.getAttribute('data-category') || '';
+
+        lightboxImg.src = item.src;
+        lightboxImg.alt = alt;
+        lightboxCaption.textContent = alt;
+        lightboxCategory.textContent = cat;
+        lightboxCounter.textContent = `${currentIndex + 1} / ${GALLERY_DATA.length}`;
+      }
+    };
+
+    const nextImage = () => {
+      currentIndex = (currentIndex + 1) % GALLERY_DATA.length;
+      updateLightbox();
+    };
+
+    const prevImage = () => {
+      currentIndex = (currentIndex - 1 + GALLERY_DATA.length) % GALLERY_DATA.length;
+      updateLightbox();
+    };
+
+    // Listeners assignment
+    galleryItems.forEach((item, index) => {
+      item.addEventListener('click', (e) => {
+        // Prevent opening if the click was registered at the end of a dragging action
+        if (isDraggingGlobal) {
+          e.preventDefault();
+          return;
+        }
+        openLightbox(index);
+      });
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxNext.addEventListener('click', nextImage);
+    lightboxPrev.addEventListener('click', prevImage);
+
+    // Close on backdrop click (excluding children elements)
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        closeLightbox();
+      }
+    });
+
+    // Keyboard bindings
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.classList.contains('hidden')) return;
+
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+    });
+  }
+</script>
