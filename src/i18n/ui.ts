@@ -13,7 +13,7 @@ export const ui = {
     'nav.sobre': 'Sobre Nosotros',
     'nav.testimonios': 'Testimonios',
     'nav.contacto': 'Contacto',
-    'hero.title': 'Carpintería Tradicional',
+    'hero.title': 'Carpintería Familiar',
     'hero.subtitle': 'Transformamos la madera en obras de arte. Muebles a medida con pasión y precisión.',
     'hero.cta': 'Contáctanos',
     'services.title': 'Nuestros Servicios',
@@ -24,8 +24,6 @@ export const ui = {
     'services.restauracion.desc': 'Devolvemos la vida a tus muebles antiguos, conservando su historia y valor.',
     'services.instalaciones.title': 'Instalaciones',
     'services.instalaciones.desc': 'Instalamos puertas, ventanas, suelos y otros elementos de madera con precisión.',
-    'services.diseno.title': 'Diseño 3D',
-    'services.diseno.desc': 'Visualiza tu proyecto antes de empezar con nuestros designs 3D fotorrealistas.',
     'gallery.title': 'Galería de Trabajos',
     'gallery.subtitle': 'Una muestra de nuestros proyectos y la pasión que ponemos en cada detalle.',
     // Categorías de Galería
@@ -86,8 +84,6 @@ export const ui = {
     'services.restauracion.desc': 'We restore your old furniture to life, preserving its history and value.',
     'services.instalaciones.title': 'Installations',
     'services.instalaciones.desc': 'We install doors, windows, floors and other wood elements with precision.',
-    'services.diseno.title': '3D Design',
-    'services.diseno.desc': 'Visualize your project before starting with our photorealistic 3D designs.',
     'gallery.title': 'Work Gallery',
     'gallery.subtitle': 'A sample of our projects and the passion we put into every detail.',
     // Gallery Categories

@@ -14,7 +14,7 @@ const t = useTranslations(lang);
       subtitle={t('services.subtitle')}
     />
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
       {SERVICES_DATA.map(service => (
         <div class="bg-white dark:bg-stone-800 p-8 rounded-lg shadow-lg text-center transform transition-transform duration-300 hover:-translate-y-2 border border-transparent dark:border-stone-700/50">
           <div class="bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-6">

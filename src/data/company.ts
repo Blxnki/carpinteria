@@ -1,5 +1,5 @@
 export const COMPANY_DATA = {
-  name: 'Carpintería Tradicional',
+  name: 'Carpintería Familiar',
   email: 'contacto@carpinteria-ejemplo.com',
   phone: '+54 9 11 1234-5678',
   address: 'Calle Falsa 123, Springfield',
