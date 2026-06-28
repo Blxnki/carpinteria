@@ -2,6 +2,7 @@
 import { GALLERY_DATA } from "../data/gallery";
 import SectionTitle from "./ui/SectionTitle.astro";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { Image } from "astro:assets";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -27,12 +28,16 @@ const t = useTranslations(lang);
             <div
               class="flex-shrink-0 w-72 sm:w-80 snap-start group relative overflow-hidden rounded-xl shadow-md dark:shadow-stone-950/40 border border-stone-100 dark:border-stone-800/80 cursor-pointer gallery-item transition-all duration-300 hover:shadow-xl"
               data-index={index}
+              data-src={item.src.src}
             >
-              <img
+              <Image
                 src={item.src}
                 alt=""
                 class="w-full h-80 object-cover transform transition-transform duration-700 group-hover:scale-110 pointer-events-none"
                 loading="lazy"
+                format="webp"
+                width={320}
+                height={320}
               />
             </div>
           );
@@ -105,8 +110,6 @@ const t = useTranslations(lang);
 </section>
 
 <script>
-  import { GALLERY_DATA } from "../data/gallery";
-
   // Elements Query
   const carousel = document.getElementById('gallery-carousel');
   const prevBtn = document.getElementById('carousel-prev');
@@ -182,6 +185,7 @@ const t = useTranslations(lang);
   const lightboxPrev = document.getElementById('lightbox-prev');
   const lightboxNext = document.getElementById('lightbox-next');
   const galleryItems = document.querySelectorAll('.gallery-item');
+  const totalItems = galleryItems.length;
 
   let currentIndex = 0;
 
@@ -208,23 +212,24 @@ const t = useTranslations(lang);
     };
 
     const updateLightbox = () => {
-      const item = GALLERY_DATA[currentIndex];
+      const itemElement = galleryItems[currentIndex] as HTMLElement;
 
-      if (item) {
+      if (itemElement) {
+        const src = itemElement.getAttribute('data-src') || '';
         lightboxImg.style.transition = 'none';
         lightboxImg.style.transform = 'translateX(0) rotate(0) scale(1)';
-        lightboxImg.src = item.src;
+        lightboxImg.src = src;
         lightboxImg.alt = '';
       }
     };
 
     const nextImage = () => {
-      currentIndex = (currentIndex + 1) % GALLERY_DATA.length;
+      currentIndex = (currentIndex + 1) % totalItems;
       updateLightbox();
     };
 
     const prevImage = () => {
-      currentIndex = (currentIndex - 1 + GALLERY_DATA.length) % GALLERY_DATA.length;
+      currentIndex = (currentIndex - 1 + totalItems) % totalItems;
       updateLightbox();
     };
 
@@ -296,16 +301,18 @@ const t = useTranslations(lang);
     lightboxImg.addEventListener('touchmove', handleMoveTouch, { passive: true });
     lightboxImg.addEventListener('touchend', handleEndTouch);
 
-    // Listeners assignment
-    galleryItems.forEach((item, index) => {
-      item.addEventListener('click', (e) => {
-        if (isDraggingGlobal) {
-          e.preventDefault();
-          return;
-        }
+    // Event Delegation for Gallery Container
+    const galleryContainer = document.getElementById('gallery-carousel');
+    if (galleryContainer) {
+      galleryContainer.addEventListener('click', (e) => {
+        const item = (e.target as Element).closest('.gallery-item') as HTMLElement;
+        if (!item || isDraggingGlobal) return;
+        
+        e.preventDefault();
+        const index = parseInt(item.dataset.index || '0', 10);
         openLightbox(index);
       });
-    });
+    }
 
     lightboxClose.addEventListener('click', closeLightbox);
     lightboxNext.addEventListener('click', nextImage);

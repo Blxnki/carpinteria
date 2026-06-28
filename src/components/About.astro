@@ -1,6 +1,8 @@
 ---
 import SectionTitle from "./ui/SectionTitle.astro";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { Image } from "astro:assets";
+import camImg from "../assets/images/carpinteria/cam.jpeg";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -27,11 +29,12 @@ const t = useTranslations(lang);
         </a>
       </div>
       <div class="order-1 md:order-2">
-        <img
-          src="/images/carpinteria/cam.jpeg"
+        <Image
+          src={camImg}
           alt="Carpintería Familiar"
           class="rounded-lg shadow-xl w-full h-auto object-cover border border-transparent dark:border-stone-800"
           loading="lazy"
+          format="webp"
         />
       </div>
     </div>

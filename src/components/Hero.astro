@@ -1,5 +1,7 @@
 ---
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { Image } from "astro:assets";
+import hammerImg from "../assets/images/carpinteria/hammer.jpg";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -7,12 +9,14 @@ const t = useTranslations(lang);
 
 <section id="inicio" class="relative min-h-screen flex items-center justify-center overflow-hidden">
   <!-- Background Image with Dark Overlay -->
-  <div class="absolute inset-0 z-0">
-    <img
-      src="/images/carpinteria/hammer.jpg"
+  <div class="absolute inset-0 z-0 bg-stone-900">
+    <Image
+      src={hammerImg}
       alt="Carpintería Familiar"
       class="w-full h-full object-cover"
       loading="eager"
+      fetchpriority="high"
+      format="webp"
     />
     <div class="absolute inset-0 bg-black/60 dark:bg-black/70 transition-colors duration-300"></div>
   </div>
