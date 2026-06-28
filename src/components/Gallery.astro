@@ -23,27 +23,17 @@ const t = useTranslations(lang);
         style="scrollbar-width: none; -ms-overflow-style: none;"
       >
         {GALLERY_DATA.map((item, index) => {
-          const altText = t(item.altKey as any);
-          const catText = t(item.categoryKey as any);
           return (
             <div
               class="flex-shrink-0 w-72 sm:w-80 snap-start group relative overflow-hidden rounded-xl shadow-md dark:shadow-stone-950/40 border border-stone-100 dark:border-stone-800/80 cursor-pointer gallery-item transition-all duration-300 hover:shadow-xl"
               data-index={index}
-              data-alt={altText}
-              data-category={catText}
             >
-              <!-- Prevent default browser image dragging behaviour -->
               <img
                 src={item.src}
-                alt={altText}
+                alt=""
                 class="w-full h-80 object-cover transform transition-transform duration-700 group-hover:scale-110 pointer-events-none"
                 loading="lazy"
               />
-              <!-- Dark gradient overlay on hover -->
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
-                <span class="text-xs text-amber-400 font-bold tracking-wider uppercase mb-1">{catText}</span>
-                <h4 class="text-white font-bold text-lg leading-snug">{altText}</h4>
-              </div>
             </div>
           );
         })}
@@ -107,14 +97,9 @@ const t = useTranslations(lang);
         id="lightbox-img"
         src=""
         alt=""
-        class="max-w-full max-h-[65vh] object-contain rounded-lg shadow-2xl border border-stone-900 cursor-grab active:cursor-grabbing pointer-events-auto"
+        class="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl border border-stone-900 cursor-grab active:cursor-grabbing pointer-events-auto"
         draggable="false"
       />
-      <div class="text-center mt-4 max-w-xl select-none pointer-events-none">
-        <span id="lightbox-category" class="text-xs text-amber-400 font-bold tracking-wider uppercase mb-1 block"></span>
-        <h3 id="lightbox-caption" class="text-white font-serif font-semibold text-lg md:text-xl leading-snug"></h3>
-        <p id="lightbox-counter" class="text-xs text-stone-400 mt-2 font-mono"></p>
-      </div>
     </div>
   </div>
 </section>
@@ -193,9 +178,6 @@ const t = useTranslations(lang);
   // Lightbox Mechanics
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
-  const lightboxCaption = document.getElementById('lightbox-caption');
-  const lightboxCategory = document.getElementById('lightbox-category');
-  const lightboxCounter = document.getElementById('lightbox-counter');
   const lightboxClose = document.getElementById('lightbox-close');
   const lightboxPrev = document.getElementById('lightbox-prev');
   const lightboxNext = document.getElementById('lightbox-next');
@@ -203,16 +185,7 @@ const t = useTranslations(lang);
 
   let currentIndex = 0;
 
-  if (
-    lightbox &&
-    lightboxImg &&
-    lightboxCaption &&
-    lightboxCategory &&
-    lightboxCounter &&
-    lightboxClose &&
-    lightboxPrev &&
-    lightboxNext
-  ) {
+  if (lightbox && lightboxImg && lightboxClose && lightboxPrev && lightboxNext) {
     const openLightbox = (index: number) => {
       currentIndex = index;
       updateLightbox();
@@ -236,21 +209,12 @@ const t = useTranslations(lang);
 
     const updateLightbox = () => {
       const item = GALLERY_DATA[currentIndex];
-      const itemElement = galleryItems[currentIndex] as HTMLElement;
 
-      if (item && itemElement) {
-        const alt = itemElement.getAttribute('data-alt') || '';
-        const cat = itemElement.getAttribute('data-category') || '';
-
-        // Reset visual transform & transitions dynamically
+      if (item) {
         lightboxImg.style.transition = 'none';
         lightboxImg.style.transform = 'translateX(0) rotate(0) scale(1)';
-
         lightboxImg.src = item.src;
-        lightboxImg.alt = alt;
-        lightboxCaption.textContent = alt;
-        lightboxCategory.textContent = cat;
-        lightboxCounter.textContent = `${currentIndex + 1} / ${GALLERY_DATA.length}`;
+        lightboxImg.alt = '';
       }
     };
 
