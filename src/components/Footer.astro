@@ -7,9 +7,13 @@ const t = useTranslations(lang);
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="bg-stone-100 dark:bg-stone-950 py-8 border-t border-stone-200 dark:border-stone-800 transition-colors duration-300">
+<footer class="bg-stone-100 dark:bg-stone-950 py-8 border-t border-stone-200 dark:border-stone-800">
   <div class="container mx-auto px-4 text-center text-stone-600 dark:text-stone-400">
     <p>&copy; {currentYear} {COMPANY_DATA.name}. {t('footer.rights')}</p>
-    <p class="mt-2">{t('footer.dev')}</p>
+    <nav class="mt-4 flex justify-center gap-4 text-sm">
+      <a href={lang === 'es' ? '/aviso-legal' : '/en/legal-notice'} class="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">{t('footer.legal')}</a>
+      <span class="text-stone-300 dark:text-stone-600">|</span>
+      <a href={lang === 'es' ? '/politica-privacidad' : '/en/privacy-policy'} class="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">{t('footer.privacy')}</a>
+    </nav>
   </div>
 </footer>

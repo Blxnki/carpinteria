@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { COMPANY_DATA } from '../../data/company';
+---
+
+<BaseLayout title="Legal Notice - Carpintería Rayco Caceres">
+  <main class="py-24">
+    <div class="container mx-auto px-4 max-w-3xl prose prose-stone dark:prose-invert">
+      <h1 class="text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100 mb-8">Legal Notice</h1>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">1. Identification</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        In compliance with Spanish Law 34/2002 on Information Society Services and Electronic Commerce, the following information is provided:
+      </p>
+      <ul class="text-stone-600 dark:text-stone-300 list-none p-0 space-y-2">
+        <li><strong>Owner:</strong> {COMPANY_DATA.name}</li>
+        <li><strong>Address:</strong> {COMPANY_DATA.address}</li>
+        <li><strong>Phone:</strong> {COMPANY_DATA.phone}</li>
+        <li><strong>Email:</strong> {COMPANY_DATA.email}</li>
+      </ul>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">2. Intellectual Property</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        All content on this website (texts, images, logos, design) is owned by {COMPANY_DATA.name} or used with the necessary rights. Total or partial reproduction without express authorization is prohibited.
+      </p>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">3. Applicable Law</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        This legal notice is governed by Spanish law. Any disputes arising from the use of this website shall be submitted to the courts of Arrecife (Las Palmas).
+      </p>
+    </div>
+  </main>
+</BaseLayout>

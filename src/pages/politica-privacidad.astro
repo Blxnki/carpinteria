@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { COMPANY_DATA } from '../data/company';
+---
+
+<BaseLayout title="Política de Privacidad - Carpintería Rayco Caceres">
+  <main class="py-24">
+    <div class="container mx-auto px-4 max-w-3xl prose prose-stone dark:prose-invert">
+      <h1 class="text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100 mb-8">Política de Privacidad</h1>
+
+      <p class="text-stone-600 dark:text-stone-300">
+        De conformidad con el Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y Garantía de los Derechos Digitales (LOPDGDD), se informa:
+      </p>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">1. Responsable del tratamiento</h2>
+      <ul class="text-stone-600 dark:text-stone-300 list-none p-0 space-y-2">
+        <li><strong>Titular:</strong> {COMPANY_DATA.name}</li>
+        <li><strong>Domicilio:</strong> {COMPANY_DATA.address}</li>
+        <li><strong>Teléfono:</strong> {COMPANY_DATA.phone}</li>
+        <li><strong>Correo electrónico:</strong> {COMPANY_DATA.email}</li>
+      </ul>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">2. Finalidad del tratamiento</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        Los datos personales facilitados a través del correo electrónico o teléfono serán tratados únicamente con la finalidad de atender y gestionar las consultas, solicitudes de presupuesto o comunicaciones comerciales solicitadas por el interesado.
+      </p>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">3. Legitimación</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        La base legal para el tratamiento de los datos es el consentimiento del interesado al contactar voluntariamente con el responsable.
+      </p>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">4. Destinatarios</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        No se cederán datos personales a terceros salvo obligación legal.
+      </p>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">5. Derechos del interesado</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        El interesado puede ejercer sus derechos de acceso, rectificación, supresión, limitación del tratamiento, portabilidad y oposición dirigiéndose por escrito a la dirección de correo electrónico {COMPANY_DATA.email} o al domicilio social, indicando como asunto "Protección de Datos".
+      </p>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">6. Plazo de conservación</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        Los datos se conservarán durante el tiempo necesario para atender la solicitud y posteriormente durante los plazos legales establecidos.
+      </p>
+    </div>
+  </main>
+</BaseLayout>

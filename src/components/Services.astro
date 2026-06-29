@@ -7,14 +7,14 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<section id="servicios" class="py-20 bg-stone-100 dark:bg-stone-900/50 transition-colors duration-300">
+<section id="servicios" class="py-20 bg-stone-100 dark:bg-stone-900/50">
   <div class="container mx-auto px-4">
     <SectionTitle
       title={t('services.title')}
       subtitle={t('services.subtitle')}
     />
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 max-w-7xl mx-auto">
       {SERVICES_DATA.map(service => (
         <div class="bg-white dark:bg-stone-800 p-8 rounded-lg shadow-lg text-center transform transition-transform duration-300 hover:-translate-y-2 border border-transparent dark:border-stone-700/50">
           <div class="bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-6">
@@ -22,8 +22,8 @@ const t = useTranslations(lang);
               <path stroke-linecap="round" stroke-linejoin="round" d={service.icon}></path>
             </svg>
           </div>
-          <h3 class="text-xl font-bold mb-2 text-stone-900 dark:text-stone-100">{t(service.titleKey as any)}</h3>
-          <p class="text-stone-600 dark:text-stone-300">{t(service.descKey as any)}</p>
+          <h3 class="text-xl font-bold mb-2 text-stone-900 dark:text-stone-100">{t(service.titleKey)}</h3>
+          <p class="text-stone-600 dark:text-stone-300">{t(service.descKey)}</p>
         </div>
       ))}
     </div>

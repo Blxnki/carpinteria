@@ -1,5 +1,2 @@
-// Place any global data in this file.
-// You can import this data from anywhere in your site by using the `import` keyword.
-
-export const SITE_TITLE = 'Carpintería Profesional';
-export const SITE_DESCRIPTION = 'Servicios de carpintería de alta calidad. Muebles a medida, reparaciones y más.';
+export const SITE_TITLE = 'Carpintería Rayco Caceres';
+export const SITE_DESCRIPTION = 'Carpintería familiar desde 1998. Más de 25 años de experiencia.';

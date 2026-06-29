@@ -3,7 +3,6 @@ import { SITE_TITLE } from '../consts';
 import LanguagePicker from './LanguagePicker.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import { Image } from "astro:assets";
 import logoImg from '../assets/images/carpinteria/logo.png';
 
 const lang = getLangFromUrl(Astro.url);
@@ -19,7 +18,7 @@ const navLinks = [
 ];
 ---
 
-<header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent">
+<header id="header" class="fixed top-0 left-0 right-0 z-50 transition-colors duration-300 border-b border-transparent">
   <div class="container mx-auto px-4">
     <nav class="flex items-center justify-between py-4">
       <a href={lang === 'es' ? '/' : `/${lang}/`} class="block transition-transform duration-300 hover:scale-105" aria-label={SITE_TITLE}>

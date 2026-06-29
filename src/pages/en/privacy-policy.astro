@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { COMPANY_DATA } from '../../data/company';
+---
+
+<BaseLayout title="Privacy Policy - Carpintería Rayco Caceres">
+  <main class="py-24">
+    <div class="container mx-auto px-4 max-w-3xl prose prose-stone dark:prose-invert">
+      <h1 class="text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100 mb-8">Privacy Policy</h1>
+
+      <p class="text-stone-600 dark:text-stone-300">
+        In accordance with EU Regulation 2016/679 (GDPR) and the Spanish Organic Law 3/2018 on Personal Data Protection and Digital Rights (LOPDGDD), the following information is provided:
+      </p>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">1. Data Controller</h2>
+      <ul class="text-stone-600 dark:text-stone-300 list-none p-0 space-y-2">
+        <li><strong>Owner:</strong> {COMPANY_DATA.name}</li>
+        <li><strong>Address:</strong> {COMPANY_DATA.address}</li>
+        <li><strong>Phone:</strong> {COMPANY_DATA.phone}</li>
+        <li><strong>Email:</strong> {COMPANY_DATA.email}</li>
+      </ul>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">2. Purpose of Processing</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        Personal data provided via email or phone will be processed solely to handle inquiries, quote requests, or commercial communications requested by the data subject.
+      </p>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">3. Legal Basis</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        The legal basis for data processing is the consent of the data subject by voluntarily contacting the controller.
+      </p>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">4. Data Recipients</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        Personal data will not be transferred to third parties except where required by law.
+      </p>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">5. Data Subject Rights</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        The data subject may exercise their rights of access, rectification, erasure, restriction of processing, data portability, and objection by writing to {COMPANY_DATA.email} or to the registered address, indicating "Data Protection" as the subject.
+      </p>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">6. Retention Period</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        Data will be retained for as long as necessary to fulfill the request and subsequently for the legally established periods.
+      </p>
+    </div>
+  </main>
+</BaseLayout>

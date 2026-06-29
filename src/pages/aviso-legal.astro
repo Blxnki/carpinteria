@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { COMPANY_DATA } from '../data/company';
+---
+
+<BaseLayout title="Aviso Legal - Carpintería Rayco Caceres">
+  <main class="py-24">
+    <div class="container mx-auto px-4 max-w-3xl prose prose-stone dark:prose-invert">
+      <h1 class="text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100 mb-8">Aviso Legal</h1>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">1. Datos identificativos</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        En cumplimiento con el artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico, se exponen los siguientes datos:
+      </p>
+      <ul class="text-stone-600 dark:text-stone-300 list-none p-0 space-y-2">
+        <li><strong>Titular:</strong> {COMPANY_DATA.name}</li>
+        <li><strong>Domicilio:</strong> {COMPANY_DATA.address}</li>
+        <li><strong>Teléfono:</strong> {COMPANY_DATA.phone}</li>
+        <li><strong>Correo electrónico:</strong> {COMPANY_DATA.email}</li>
+      </ul>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">2. Propiedad intelectual</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        Todos los contenidos del sitio web (textos, imágenes, logotipos, diseño) son propiedad de {COMPANY_DATA.name} o se dispone de los derechos necesarios para su uso. Queda prohibida la reproducción total o parcial sin autorización expresa.
+      </p>
+
+      <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mt-8 mb-4">3. Legislación aplicable</h2>
+      <p class="text-stone-600 dark:text-stone-300">
+        Este aviso legal se rige por la legislación española. Para cualquier controversia derivada del uso del sitio web, las partes se someten a los juzgados y tribunales de Arrecife (Las Palmas).
+      </p>
+    </div>
+  </main>
+</BaseLayout>

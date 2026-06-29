@@ -14,4 +14,14 @@ export const SERVICES_DATA = [
     descKey: 'services.instalaciones.desc',
     icon: 'M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h12A2.25 2.25 0 0 0 20.25 14.25V3M3.75 3H20.25M3.75 3v-1.5A2.25 2.25 0 0 1 6 0h12A2.25 2.25 0 0 1 20.25 1.5v1.5',
   },
+  {
+    titleKey: 'services.pergolas.title',
+    descKey: 'services.pergolas.desc',
+    icon: 'M3 3h18v18H3V3zm2 2v14h14V5H5zm2 2h10v2H7V7zm0 4h10v2H7v-2zm0 4h10v2H7v-2z',
+  },
+  {
+    titleKey: 'services.asfaltica.title',
+    descKey: 'services.asfaltica.desc',
+    icon: 'M12 2L3 7v6c0 5.25 3.83 10.25 9 11 5.17-.75 9-5.75 9-11V7l-9-5z',
+  },
 ];
