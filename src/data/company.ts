@@ -13,6 +13,8 @@ export const COMPANY_DATA = {
   },
   // Public business details checked against the Google Maps profile on 2026-09-30.
   googleMaps: 'https://www.google.com/maps/place/Carpinter%C3%ADa+Madera+Rayco+Caceres/@28.9708329,-13.5667018,17z/data=!3m1!4b1!4m6!3m5!1s0xc46276d2c9c9c3b:0x539e425a8e6d99e7!8m2!3d28.9708329!4d-13.5667018!16s%2Fg%2F1tczx5s3',
+  // Opens the Google review form; business heading verified in the browser.
+  googleReviewUrl: 'https://www.google.com/maps/place//data=!4m3!3m2!1s0xc46276d2c9c9c3b:0x539e425a8e6d99e7!12e1',
   openingHours: { es: 'Lunes a viernes, de 08:00 a 15:00', en: 'Monday to Friday, 08:00–15:00' },
   openingHoursSpecification: {
     '@type': 'OpeningHoursSpecification',

@@ -13,8 +13,11 @@ const es = getLangFromUrl(Astro.url) === 'es';
       <span class="review-source">Google Maps</span>
       <h3>{COMPANY_DATA.businessName}</h3>
       <p>{es ? 'Lee las opiniones de nuestros clientes y consulta sus experiencias en nuestra ficha de Google. Allí encontrarás las reseñas y la valoración actualizadas.' : 'Read our customers’ experiences on our Google business profile, where you can find the latest reviews and rating.'}</p>
-      <a class="button-outline" href={COMPANY_DATA.googleMaps} target="_blank" rel="noopener noreferrer" aria-label={es ? 'Ver opiniones en Google (se abre en una pestaña nueva)' : 'Read reviews on Google (opens in a new tab)'}>{es ? 'Ver opiniones en Google' : 'Read reviews on Google'}<span aria-hidden="true">↗</span></a>
-      <p class="review-invitation">{es ? '¿Hemos trabajado juntos? Puedes compartir tu experiencia en nuestra ficha. Tu opinión nos ayuda a mejorar.' : 'Have we worked together? You can share your experience on our profile. Your feedback helps us improve.'}</p>
+      <div class="review-actions">
+        <a class="button" href={COMPANY_DATA.googleReviewUrl} target="_blank" rel="noopener noreferrer" aria-label={es ? 'Dejar una reseña en Google (se abre en una pestaña nueva)' : 'Leave a review on Google (opens in a new tab)'}>{es ? 'Dejar una reseña' : 'Leave a review'}<span aria-hidden="true">↗</span></a>
+        <a class="button-outline" href={COMPANY_DATA.googleMaps} target="_blank" rel="noopener noreferrer" aria-label={es ? 'Ver opiniones en Google (se abre en una pestaña nueva)' : 'Read reviews on Google (opens in a new tab)'}>{es ? 'Ver opiniones en Google' : 'Read reviews on Google'}<span aria-hidden="true">↗</span></a>
+      </div>
+      <p class="review-invitation">{es ? '¿Hemos trabajado juntos? Comparte tu experiencia. Tu opinión nos ayuda a mejorar. Necesitarás iniciar sesión en tu cuenta de Google.' : 'Have we worked together? Share your experience. Your feedback helps us improve. You’ll need to sign in to your Google account.'}</p>
     </div>
   </div>
 </section>
@@ -26,6 +29,8 @@ const es = getLangFromUrl(Astro.url) === 'es';
   .review-source { color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: .03em; }
   h3 { margin: 12px 0; font-size: 19px; font-weight: 600; }
   .reviews-card p { margin: 0 0 24px; color: var(--muted); font-size: 15px; line-height: 1.8; }
+  .review-actions { display: flex; flex-wrap: wrap; gap: 12px; }
   .reviews-card .review-invitation { margin: 22px 0 0; font-size: 12px; }
   @media (max-width: 800px) { .reviews-grid { grid-template-columns: 1fr; gap: 24px; } .reviews-card { padding: 26px; } .section-heading { margin-bottom: 0; } }
+  @media (max-width: 480px) { .review-actions { flex-direction: column; align-items: stretch; } }
 </style>

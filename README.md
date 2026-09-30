@@ -18,7 +18,7 @@ Requiere Node.js 22.19 o posterior. Se recomienda Node.js 24 LTS.
 - `src/data/services.ts` y `src/i18n/ui.ts`: servicios y textos compartidos.
 - `src/data/service-pages.ts`: contenido y fotografías de las páginas de muebles, pérgolas y puertas, en ambos idiomas.
 - `src/i18n/routes.ts`: parejas de URLs en español e inglés, compartidas por las etiquetas hreflang y el selector de idioma.
-- `src/components/Testimonials.astro`: enlace a las opiniones reales y actualizadas de Google; no muestra citas ni puntuaciones estáticas.
+- `src/components/Testimonials.astro`: enlaces para consultar las opiniones reales de Google y escribir una reseña; no muestra citas ni puntuaciones estáticas.
 - `src/styles/global.css`: colores, tipografía y estilos compartidos.
 
 Las páginas principales están en `/` y `/en/`. Cada idioma conserva sus páginas legales.
@@ -40,6 +40,8 @@ El sitemap se genera en cada build: `https://carpinteriaraycocaceres.com/sitemap
 En Search Console, revisar indexación, consultas, impresiones y clics una vez que Google tenga datos. Al añadir un servicio, completar ambos idiomas y su pareja en `routes.ts`; no crear copias de una misma página cambiando sólo el municipio. Al publicar proyectos, usar fotos propias y describir únicamente trabajos y ubicaciones confirmados.
 
 Mantener el horario y los servicios de Maps al día, publicar fotos de trabajos reales y responder a las reseñas. Invitar a todos los clientes a compartir su experiencia sin incentivos ni filtros según la valoración. La web enlaza a la ficha de Google sin widgets externos ni marcado de estrellas de reseñas del propio negocio. Estas mejoras no garantizan una posición concreta.
+
+El botón «Dejar una reseña» usa `googleReviewUrl` en `company.ts` y abre directamente el formulario de Google. Los clientes necesitan iniciar sesión en su cuenta de Google. `public/qr-resena-google.png` y `public/qr-resena-google.svg` contienen ese mismo enlace y pueden imprimirse o compartirse. Si cambia el destino, regenerar también ambos QR.
 
 ## Publicación
 
