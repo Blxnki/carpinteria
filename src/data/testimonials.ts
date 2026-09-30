@@ -1,20 +1,31 @@
+// Selected manually from the business's Google Maps profile.
+// Preserve each author's original wording and link; excerpts must be labelled.
 export const TESTIMONIALS_DATA = [
   {
-    name: 'Ana García',
-    role: 'Cliente Particular',
-    testimonial: 'El mueble de salón que crearon para mí es simplemente perfecto. Captaron mi idea a la primera y la calidad es insuperable. ¡Totalmente recomendados!',
+    author: 'Judith abellan',
     rating: 5,
+    text: 'Buen profesional, persona seria y de confianza. Lo recomendamos',
+    sourceUrl: 'https://maps.app.goo.gl/C7BaCX4cf5mLxpSi7',
+    isExcerpt: false,
+    verifiedAt: '2026-09-30',
+    lang: 'es',
   },
   {
-    name: 'Marcos Rodríguez',
-    role: 'Diseñador de Interiores',
-    testimonial: 'Colaboro con ellos en muchos de mis proyectos. Su profesionalidad, atención al detalle y habilidad para trabajar la madera son excepcionales. Siempre cumplen.',
+    author: 'Raulillo',
     rating: 5,
+    text: 'Hacen muy buen trabajo y estoy muy satisfecho 😊😊',
+    sourceUrl: 'https://maps.app.goo.gl/fyiozM4dbJAwuXuc7',
+    isExcerpt: false,
+    verifiedAt: '2026-09-30',
+    lang: 'es',
   },
   {
-    name: 'Laura Fernández',
-    role: 'Cliente Particular',
-    testimonial: 'Restauraron una cómoda de mi abuela y el resultado es espectacular. Han conservado su esencia pero ahora luce como nueva. Un trabajo impecable.',
+    author: 'Jorge Murillo',
     rating: 5,
+    text: 'Muy buen servicio. Me hicieron un trabajo de carpintería excelente, con muy buen trato desde el principio.',
+    sourceUrl: 'https://maps.app.goo.gl/mB8vrCH2jygVH28u6',
+    isExcerpt: true,
+    verifiedAt: '2026-09-30',
+    lang: 'es',
   },
-];
+] as const;

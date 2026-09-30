@@ -1,5 +1,6 @@
 ---
 import { COMPANY_DATA } from '../data/company';
+import { TESTIMONIALS_DATA } from '../data/testimonials';
 import { getLangFromUrl } from '../i18n/utils';
 const es = getLangFromUrl(Astro.url) === 'es';
 ---
@@ -12,12 +13,35 @@ const es = getLangFromUrl(Astro.url) === 'es';
     <div class="reviews-card">
       <span class="review-source">Google Maps</span>
       <h3>{COMPANY_DATA.businessName}</h3>
-      <p>{es ? 'Lee las opiniones de nuestros clientes y consulta sus experiencias en nuestra ficha de Google. Allí encontrarás las reseñas y la valoración actualizadas.' : 'Read our customers’ experiences on our Google business profile, where you can find the latest reviews and rating.'}</p>
+      <p>{es ? 'Descubre algunas experiencias de nuestros clientes. En nuestra ficha de Google encontrarás todas las opiniones y la valoración actualizada.' : 'Discover some of our customers’ experiences. Our Google business profile has all the reviews and the latest rating.'}</p>
       <div class="review-actions">
         <a class="button" href={COMPANY_DATA.googleReviewUrl} target="_blank" rel="noopener noreferrer" aria-label={es ? 'Dejar una reseña en Google (se abre en una pestaña nueva)' : 'Leave a review on Google (opens in a new tab)'}>{es ? 'Dejar una reseña' : 'Leave a review'}<span aria-hidden="true">↗</span></a>
         <a class="button-outline" href={COMPANY_DATA.googleMaps} target="_blank" rel="noopener noreferrer" aria-label={es ? 'Ver opiniones en Google (se abre en una pestaña nueva)' : 'Read reviews on Google (opens in a new tab)'}>{es ? 'Ver opiniones en Google' : 'Read reviews on Google'}<span aria-hidden="true">↗</span></a>
       </div>
       <p class="review-invitation">{es ? '¿Hemos trabajado juntos? Comparte tu experiencia. Tu opinión nos ayuda a mejorar. Necesitarás iniciar sesión en tu cuenta de Google.' : 'Have we worked together? Share your experience. Your feedback helps us improve. You’ll need to sign in to your Google account.'}</p>
+    </div>
+  </div>
+  <div class="shell review-selection">
+    <p class="selection-note">{es ? 'Una selección de opiniones publicadas en Google. Consulta todas las reseñas y la valoración actualizada en nuestra ficha.' : 'A selection of reviews published on Google. Find all the reviews and the latest rating on our business profile.'}</p>
+    <div class="manual-reviews">
+      {TESTIMONIALS_DATA.map((review) => (
+        <figure class="manual-review">
+          <span class="review-rating" role="img" aria-label={es ? `${review.rating} de 5 estrellas` : `${review.rating} out of 5 stars`}>
+            <span aria-hidden="true">{'★'.repeat(review.rating)}</span>
+          </span>
+          <div class="review-quote">
+            <blockquote cite={review.sourceUrl} lang={review.lang}><p>{review.text}</p></blockquote>
+            {review.isExcerpt && <p class="review-excerpt">{es ? 'Extracto de la reseña' : 'Review excerpt'}</p>}
+          </div>
+          <figcaption>
+            <span class="review-author" lang={review.lang}>{review.author}</span>
+            <span class="review-origin">Google Maps</span>
+            <a class="text-link review-link" href={review.sourceUrl} target="_blank" rel="noopener noreferrer" aria-label={es ? `Ver reseña de ${review.author} en Google (se abre en una pestaña nueva)` : `Read ${review.author}’s review on Google (opens in a new tab)`}>
+              {es ? 'Ver reseña en Google' : 'Read review on Google'}<span aria-hidden="true">↗</span>
+            </a>
+          </figcaption>
+        </figure>
+      ))}
     </div>
   </div>
 </section>
@@ -31,6 +55,20 @@ const es = getLangFromUrl(Astro.url) === 'es';
   .reviews-card p { margin: 0 0 24px; color: var(--muted); font-size: 15px; line-height: 1.8; }
   .review-actions { display: flex; flex-wrap: wrap; gap: 12px; }
   .reviews-card .review-invitation { margin: 22px 0 0; font-size: 12px; }
-  @media (max-width: 800px) { .reviews-grid { grid-template-columns: 1fr; gap: 24px; } .reviews-card { padding: 26px; } .section-heading { margin-bottom: 0; } }
+  .review-selection { margin-top: 38px; }
+  .selection-note { margin: 0 0 20px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+  .manual-reviews { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .manual-review { display: flex; flex-direction: column; min-width: 0; margin: 0; padding: 28px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); }
+  .review-rating { align-self: flex-start; color: var(--accent); font-size: 19px; letter-spacing: .12em; line-height: 1; }
+  .review-quote { flex: 1; margin: 22px 0 24px; }
+  blockquote { margin: 0; }
+  blockquote p { margin: 0; color: var(--ink); font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; }
+  .review-excerpt { margin: 12px 0 0; color: var(--muted); font-size: 12px; }
+  figcaption { display: flex; flex-direction: column; align-items: flex-start; }
+  .review-author { color: var(--ink); font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+  .review-origin { margin-top: 2px; color: var(--muted); font-size: 12px; }
+  .review-link { margin-top: 16px; min-height: 44px; color: var(--accent); }
+  .review-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+  @media (max-width: 800px) { .reviews-grid { grid-template-columns: 1fr; gap: 24px; } .reviews-card { padding: 26px; } .section-heading { margin-bottom: 0; } .manual-reviews { grid-template-columns: 1fr; } .review-selection { margin-top: 28px; } .manual-review { padding: 26px; } }
   @media (max-width: 480px) { .review-actions { flex-direction: column; align-items: stretch; } }
 </style>

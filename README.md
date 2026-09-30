@@ -18,7 +18,8 @@ Requiere Node.js 22.19 o posterior. Se recomienda Node.js 24 LTS.
 - `src/data/services.ts` y `src/i18n/ui.ts`: servicios y textos compartidos.
 - `src/data/service-pages.ts`: contenido y fotografías de las páginas de muebles, pérgolas y puertas, en ambos idiomas.
 - `src/i18n/routes.ts`: parejas de URLs en español e inglés, compartidas por las etiquetas hreflang y el selector de idioma.
-- `src/components/Testimonials.astro`: enlaces para consultar las opiniones reales de Google y escribir una reseña; no muestra citas ni puntuaciones estáticas.
+- `src/data/testimonials.ts`: tres reseñas reales seleccionadas manualmente, con autor, valoración, texto original, enlace individual y fecha de comprobación.
+- `src/components/Testimonials.astro`: muestra esa selección y los enlaces para consultar todas las opiniones de Google o escribir una reseña.
 - `src/styles/global.css`: colores, tipografía y estilos compartidos.
 
 Las páginas principales están en `/` y `/en/`. Cada idioma conserva sus páginas legales.
@@ -42,6 +43,8 @@ En Search Console, revisar indexación, consultas, impresiones y clics una vez q
 Mantener el horario y los servicios de Maps al día, publicar fotos de trabajos reales y responder a las reseñas. Invitar a todos los clientes a compartir su experiencia sin incentivos ni filtros según la valoración. La web enlaza a la ficha de Google sin widgets externos ni marcado de estrellas de reseñas del propio negocio. Estas mejoras no garantizan una posición concreta.
 
 El botón «Dejar una reseña» usa `googleReviewUrl` en `company.ts` y abre directamente el formulario de Google. Los clientes necesitan iniciar sesión en su cuenta de Google. `public/qr-resena-google.png` y `public/qr-resena-google.svg` contienen ese mismo enlace y pueden imprimirse o compartirse. Si cambia el destino, regenerar también ambos QR.
+
+Las tres citas de `testimonials.ts` se comprobaron en Google el 30 de septiembre de 2026 y se mantienen de forma manual. Antes de cambiarlas, abrir su enlace individual, comprobar el autor y la valoración y actualizar `verifiedAt`. Conservar las palabras originales; si se utiliza sólo parte del texto, marcar `isExcerpt: true` para mostrar «Extracto de la reseña». En la página inglesa las citas siguen en su idioma original. La selección no representa todas las opiniones ni la valoración media actual; ambas se consultan en Google. No incorpora widgets, llamadas externas ni datos estructurados `Review` o `AggregateRating` del propio negocio.
 
 ## Publicación
 
