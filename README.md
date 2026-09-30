@@ -1,10 +1,10 @@
 # Carpintería Rayco Cáceres
 
-Web estática bilingüe (español e inglés) para una carpintería familiar en Lanzarote, creada con Astro 6 y Tailwind CSS 4.
+Web estática bilingüe (español e inglés) para una carpintería familiar en Lanzarote, creada con Astro 7 y Tailwind CSS 4.
 
 ## Desarrollo
 
-Requiere Node.js 22.12 o posterior.
+Requiere Node.js 22.19 o posterior. Se recomienda Node.js 24 LTS.
 
 - `npm ci`: instala las dependencias fijadas en el lockfile.
 - `npm run dev`: abre el servidor de desarrollo en http://localhost:4321.
@@ -31,4 +31,8 @@ Los botones de presupuesto abren el cliente de correo; las llamadas y la direcci
 
 ## Publicación
 
-Configura el dominio real en `site` dentro de `astro.config.mjs` antes de publicar: el proyecto conserva el dominio de ejemplo original. Este valor se utiliza en el sitemap, los enlaces canónicos y las tarjetas para compartir. Publica el contenido de `dist/` en un alojamiento estático.
+El dominio de producción es `https://carpinteriaraycocaceres.com`, configurado en `astro.config.mjs` y `public/robots.txt`. Se utiliza en el sitemap, los enlaces canónicos y las tarjetas para compartir. Si cambia el dominio, actualiza ambos archivos.
+
+Hostinger está conectado a la rama `main` de GitHub con despliegue automático. Compila con `npm run build` y publica el contenido de `dist/`. El entorno de compilación debe cumplir el requisito de Node.js indicado arriba.
+
+Antes de integrar cambios de dependencias, ejecuta `npm ci`, `npm audit` y `npm run build`. Actualiza y sube juntos `package.json` y `package-lock.json`.
