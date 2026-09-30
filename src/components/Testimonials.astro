@@ -1,39 +1,78 @@
 ---
 import { TESTIMONIALS_DATA } from "../data/testimonials";
-import SectionTitle from "./ui/SectionTitle.astro";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const isEnglish = lang === "en";
+const englishReviews = [
+  {
+    role: "Private client",
+    testimonial: "The living room furniture they created for me is simply perfect. They understood my idea right away, and the quality is outstanding. Highly recommended!",
+  },
+  {
+    role: "Interior designer",
+    testimonial: "I work with them on many of my projects. Their professionalism, attention to detail and skill with wood are exceptional. They always deliver.",
+  },
+  {
+    role: "Private client",
+    testimonial: "They restored my grandmother's chest of drawers, and the result is spectacular. They preserved its character, but it now looks like new. Impeccable work.",
+  },
+];
 ---
 
-<section id="testimonios" class="py-20 bg-white dark:bg-stone-950">
-  <div class="container mx-auto px-4">
-    <SectionTitle
-      title={t('testimonials.title')}
-      subtitle={t('testimonials.subtitle')}
-    />
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {TESTIMONIALS_DATA.map(testimonial => (
-        <div class="bg-stone-50 dark:bg-stone-900 p-8 rounded-lg shadow-md border-l-4 border-amber-500 border-y border-r border-transparent dark:border-y-stone-800 dark:border-r-stone-800">
-          <div class="flex items-center mb-4">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <svg class:list={[
-                  "w-5 h-5",
-                  i < testimonial.rating ? "text-amber-500" : "text-stone-300 dark:text-stone-700"
-                ]} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+<section id="testimonios" class="testimonials section-pad" aria-labelledby="testimonials-heading">
+  <div class="shell">
+    <div class="testimonials-heading">
+      <p class="eyebrow">{isEnglish ? "In their words" : "En sus palabras"}</p>
+      <h2 id="testimonials-heading" class="section-heading">{t("testimonials.title")}</h2>
+      <p>{t("testimonials.subtitle")}</p>
+    </div>
+    <div class="testimonials-grid">
+      {TESTIMONIALS_DATA.map((testimonial, index) => (
+        <figure class="testimonial">
+          <div class="testimonial-stars" role="img" aria-label={isEnglish ? `${testimonial.rating} out of 5 stars` : `${testimonial.rating} de 5 estrellas`}>
+            {Array.from({ length: 5 }).map((_, starIndex) => (
+              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 20 20" fill={starIndex < testimonial.rating ? "currentColor" : "none"} stroke="currentColor" stroke-width="1">
+                <path d="m10 1.8 2.5 5.1 5.6.8-4.1 4 1 5.6-5-2.6-5 2.6 1-5.6-4.1-4 5.6-.8z" />
               </svg>
             ))}
           </div>
-          <p class="text-stone-600 dark:text-stone-300 italic mb-6">"{testimonial.testimonial}"</p>
-          <div>
-            <p class="font-bold text-stone-900 dark:text-stone-100">{testimonial.name}</p>
-            <p class="text-sm text-stone-500 dark:text-stone-400">{testimonial.role}</p>
-          </div>
-        </div>
+          <blockquote><p>“{isEnglish ? englishReviews[index].testimonial : testimonial.testimonial}”</p></blockquote>
+          <figcaption>
+            <span class="testimonial-initials" aria-hidden="true">{testimonial.name.split(" ").map((part) => part[0]).join("")}</span>
+            <div><strong>{testimonial.name}</strong><span>{isEnglish ? englishReviews[index].role : testimonial.role}</span></div>
+          </figcaption>
+        </figure>
       ))}
     </div>
   </div>
 </section>
+
+<style>
+  .testimonials { background: var(--paper); }
+  .testimonials-heading { max-width: 700px; margin: 0 auto 48px; text-align: center; }
+  .testimonials-heading .section-heading { margin-bottom: 18px; }
+  .testimonials-heading > p:last-child { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.8; }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .testimonial { display: flex; flex-direction: column; margin: 0; padding: 8px 32px; border-right: 1px solid var(--line); }
+  .testimonial:first-child { padding-left: 0; }
+  .testimonial:last-child { padding-right: 0; border-right: 0; }
+  .testimonial-stars { display: flex; gap: 4px; color: var(--accent); margin-bottom: 22px; }
+  blockquote { margin: 0 0 28px; }
+  blockquote p { margin: 0; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 21px; line-height: 1.65; }
+  figcaption { display: flex; align-items: center; gap: 13px; margin-top: auto; }
+  .testimonial-initials { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; color: var(--accent); background: var(--surface); border: 1px solid var(--line); border-radius: 50%; font-size: 12px; letter-spacing: .02em; }
+  figcaption strong { display: block; color: var(--ink); font-size: 13px; font-weight: 600; }
+  figcaption div > span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+  @media (max-width: 900px) { .testimonial { padding: 8px 22px; } blockquote p { font-size: 19px; } }
+  @media (max-width: 760px) {
+    .testimonials-heading { text-align: left; margin-bottom: 32px; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .testimonial, .testimonial:first-child, .testimonial:last-child { padding: 28px 0; border-right: 0; border-bottom: 1px solid var(--line); }
+    .testimonial:first-child { padding-top: 0; }
+    .testimonial:last-child { padding-bottom: 0; border-bottom: 0; }
+    blockquote { margin-bottom: 22px; }
+    blockquote p { font-size: 22px; }
+  }
+</style>

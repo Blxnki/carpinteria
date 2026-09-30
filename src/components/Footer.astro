@@ -3,17 +3,56 @@ import { COMPANY_DATA } from '../data/company';
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
+const isEnglish = lang === 'en';
 const t = useTranslations(lang);
+const home = isEnglish ? '/en/' : '/';
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="bg-stone-100 dark:bg-stone-950 py-8 border-t border-stone-200 dark:border-stone-800">
-  <div class="container mx-auto px-4 text-center text-stone-600 dark:text-stone-400">
-    <p>&copy; {currentYear} {COMPANY_DATA.name}. {t('footer.rights')}</p>
-    <nav class="mt-4 flex justify-center gap-4 text-sm">
-      <a href={lang === 'es' ? '/aviso-legal' : '/en/legal-notice'} class="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">{t('footer.legal')}</a>
-      <span class="text-stone-300 dark:text-stone-600">|</span>
-      <a href={lang === 'es' ? '/politica-privacidad' : '/en/privacy-policy'} class="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">{t('footer.privacy')}</a>
-    </nav>
+<footer class="footer">
+  <div class="shell">
+    <div class="footer-main">
+      <a class="footer-brand" href={`${home}#inicio`} aria-label={COMPANY_DATA.name}>
+        <span class="footer-wordmark">Rayco Cáceres<span class="brand-dot">.</span></span>
+        <span class="footer-tagline">{isEnglish ? 'Carpentry in Lanzarote' : 'Carpintería en Lanzarote'}</span>
+      </a>
+      <nav class="footer-navigation" aria-label={isEnglish ? 'Footer navigation' : 'Navegación del pie de página'}>
+        <a href={`${home}#servicios`}>{isEnglish ? 'Services' : 'Servicios'}</a>
+        <a href={`${home}#galeria`}>{isEnglish ? 'Projects' : 'Proyectos'}</a>
+        <a href={`${home}#sobre-nosotros`}>{isEnglish ? 'About us' : 'Nosotros'}</a>
+        <a href={`${home}#contacto`}>{isEnglish ? 'Contact' : 'Contacto'}</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; {currentYear} {COMPANY_DATA.name}. {t('footer.rights')}</p>
+      <nav class="footer-legal" aria-label={isEnglish ? 'Legal information' : 'Información legal'}>
+        <a href={isEnglish ? '/en/legal-notice' : '/aviso-legal'}>{t('footer.legal')}</a>
+        <a href={isEnglish ? '/en/privacy-policy' : '/politica-privacidad'}>{t('footer.privacy')}</a>
+      </nav>
+    </div>
   </div>
 </footer>
+
+<style>
+  .footer { background: var(--paper); color: var(--ink); padding: 62px 0 26px; }
+  .footer-main { display: flex; align-items: center; justify-content: space-between; gap: 32px; padding-bottom: 42px; }
+  .footer-brand { display: inline-flex; flex-direction: column; gap: 9px; text-decoration: none; color: var(--ink); }
+  .footer-wordmark { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.8rem, 3vw, 2.2rem); letter-spacing: -.055em; line-height: 1; }
+  .brand-dot { color: var(--accent); }
+  .footer-tagline { color: var(--muted); font-size: .75rem; letter-spacing: .055em; }
+  .footer-navigation, .footer-legal { display: flex; flex-wrap: wrap; align-items: center; gap: 26px; }
+  .footer-navigation a { font-size: .87rem; color: var(--ink); }
+  .footer a { text-decoration: none; }
+  .footer-navigation a:hover, .footer-legal a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 5px; }
+  .footer-bottom { border-top: 1px solid var(--line); padding-top: 24px; display: flex; align-items: baseline; justify-content: space-between; gap: 20px; color: var(--muted); font-size: .72rem; line-height: 1.7; }
+  .footer-bottom p { margin: 0; }
+  .footer-legal { gap: 23px; }
+  .footer-legal a { color: var(--muted); }
+  .footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+  @media (max-width: 760px) {
+    .footer { padding-top: 42px; }
+    .footer-main { align-items: flex-start; flex-direction: column; gap: 30px; padding-bottom: 32px; }
+    .footer-bottom { flex-direction: column; gap: 15px; }
+    .footer-navigation { gap: 16px 24px; }
+  }
+</style>

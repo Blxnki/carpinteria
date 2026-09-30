@@ -2,88 +2,88 @@
 import { SITE_TITLE } from '../consts';
 import LanguagePicker from './LanguagePicker.astro';
 import ThemeToggle from './ThemeToggle.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import logoImg from '../assets/images/carpinteria/logo.png';
-
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-
-const navLinks = [
-  { name: t('nav.inicio'), href: '#inicio' },
-  { name: t('nav.servicios'), href: '#servicios' },
-  { name: t('nav.galeria'), href: '#galeria' },
-  { name: t('nav.sobre'), href: '#sobre-nosotros' },
-  { name: t('nav.testimonios'), href: '#testimonios' },
-  { name: t('nav.contacto'), href: '#contacto' },
+import { getLangFromUrl } from '../i18n/utils';
+const es = getLangFromUrl(Astro.url) === 'es';
+const home = es ? '/' : '/en/';
+const onHome = Astro.url.pathname === home || Astro.url.pathname === home.slice(0, -1);
+const anchor = (id: string) => onHome ? '#' + id : home + '#' + id;
+const links = [
+  { name: es ? 'Inicio' : 'Home', id: 'inicio' },
+  { name: es ? 'Servicios' : 'Services', id: 'servicios' },
+  { name: es ? 'Proyectos' : 'Projects', id: 'galeria' },
+  { name: es ? 'Nuestro taller' : 'Our workshop', id: 'sobre-nosotros' },
 ];
 ---
-
-<header id="header" class="fixed top-0 left-0 right-0 z-50 transition-colors duration-300 border-b border-transparent">
-  <div class="container mx-auto px-4">
-    <nav class="flex items-center justify-between py-4">
-      <a href={lang === 'es' ? '/' : `/${lang}/`} class="block transition-transform duration-300 hover:scale-105" aria-label={SITE_TITLE}>
-        <img
-          src={logoImg.src}
-          alt={SITE_TITLE}
-          class="h-10 md:h-12 w-auto object-contain dark:brightness-110"
-          loading="eager"
-        />
-      </a>
-
-      <!-- Desktop Menu -->
-      <div class="hidden md:flex items-center space-x-6">
-        {navLinks.map(link => (
-          <a href={link.href} class="text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 transition-colors font-medium">{link.name}</a>
-        ))}
-      </div>
-
-      <div class="flex items-center space-x-4">
-        <LanguagePicker />
-        <ThemeToggle />
-
-        <!-- Mobile Menu Button -->
-        <button id="mobile-menu-button" class="md:hidden p-2 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 focus:outline-none focus:ring-2 focus:ring-stone-500 rounded-lg">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-          </svg>
-        </button>
-      </div>
-    </nav>
-  </div>
+<header class="site-header">
+  <nav class="shell nav-shell" aria-label={es ? 'Navegación principal' : 'Main navigation'}>
+    <a href={home} class="brand" aria-label={SITE_TITLE}>
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 36" fill="none"><path d="M7 29V7h10c5 0 8 2.5 8 7s-3 7-8 7H7m10 0 9 8M3 33h26" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" /></svg></span>
+      <span class="brand-name">Rayco Cáceres<small>{es ? 'Carpintería artesanal' : 'Artisan carpentry'}</small></span>
+    </a>
+    <div class="desktop-links">
+      {links.map(link => <a href={anchor(link.id)}>{link.name}</a>)}
+    </div>
+    <div class="nav-actions">
+      <LanguagePicker />
+      <ThemeToggle />
+      <a class="button nav-cta" href={anchor('contacto')}>{es ? 'Hablemos' : "Let's talk"}<span aria-hidden="true">↗</span></a>
+      <button id="mobile-menu-button" type="button" class="menu-button" aria-controls="mobile-menu" aria-expanded="false" aria-label={es ? 'Abrir menú' : 'Open menu'} data-open-label={es ? 'Abrir menú' : 'Open menu'} data-close-label={es ? 'Cerrar menú' : 'Close menu'}>
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path class="menu-lines" d="M4 7h16M4 12h16M4 17h16" /><path class="menu-cross" d="m6 6 12 12M6 18 18 6" /></svg>
+      </button>
+    </div>
+  </nav>
+  <nav id="mobile-menu" class="mobile-menu" hidden aria-label={es ? 'Menú móvil' : 'Mobile navigation'}>
+    <div class="shell mobile-links">{links.map(link => <a href={anchor(link.id)}>{link.name}<span aria-hidden="true">↗</span></a>)}<a href={anchor('contacto')}>{es ? 'Cuéntanos tu proyecto' : 'Tell us about your project'}<span aria-hidden="true">↗</span></a></div>
+  </nav>
 </header>
-
-<!-- Mobile Menu -->
-<div id="mobile-menu" class="fixed inset-0 z-40 bg-stone-50 dark:bg-stone-900 transform -translate-y-full transition-transform duration-300 ease-in-out md:hidden flex items-center justify-center">
-  <div class="flex flex-col items-center justify-center space-y-6">
-    {navLinks.map(link => (
-      <a href={link.href} class="text-2xl text-stone-800 dark:text-stone-200 hover:text-amber-600 dark:hover:text-amber-500 mobile-menu-link font-medium">{link.name}</a>
-    ))}
-  </div>
-</div>
-
 <script>
-  const mobileMenuButton = document.getElementById('mobile-menu-button');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
-
-  mobileMenuButton?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('-translate-y-full');
-  });
-
-  mobileMenuLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      mobileMenu?.classList.add('-translate-y-full');
+  const button = document.querySelector<HTMLButtonElement>('#mobile-menu-button');
+  const menu = document.querySelector<HTMLElement>('#mobile-menu');
+  if (button && menu) {
+    const setOpen = (open: boolean) => {
+      menu.hidden = !open;
+      button.setAttribute('aria-expanded', String(open));
+      button.setAttribute('aria-label', (open ? button.dataset.closeLabel : button.dataset.openLabel) || '');
+    };
+    button.addEventListener('click', () => setOpen(menu.hidden));
+    menu.addEventListener('click', (event) => { if ((event.target as Element).closest('a')) setOpen(false); });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !menu.hidden) { setOpen(false); button.focus(); }
     });
-  });
-
-  const header = document.getElementById('header');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      header?.classList.add('bg-white/90', 'dark:bg-stone-950/90', 'backdrop-blur-md', 'shadow-md', 'border-stone-200/50', 'dark:border-stone-800/50');
-      header?.classList.remove('border-transparent');
-    } else {
-      header?.classList.remove('bg-white/90', 'dark:bg-stone-950/90', 'backdrop-blur-md', 'shadow-md', 'border-stone-200/50', 'dark:border-stone-800/50');
-      header?.classList.add('border-transparent');
-    }
-  });
+    document.addEventListener('click', (event) => { if (!(event.target as Element).closest('.site-header')) setOpen(false); });
+    window.matchMedia('(min-width: 1101px)').addEventListener('change', (event) => { if (event.matches) setOpen(false); });
+  }
 </script>
+<style>
+  .site-header { position: sticky; top: 0; z-index: 40; background: var(--paper); border-bottom: 1px solid var(--line); }
+  .nav-shell { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 90px; }
+  .brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .brand-mark { width: 41px; height: 43px; color: var(--accent); }
+  .brand-mark svg { width: 100%; height: 100%; }
+  .brand-name { font-family: Georgia, serif; font-size: 22px; line-height: 1.2; letter-spacing: -.035em; }
+  .brand-name small { display: block; font: 8px 'Segoe UI', Arial, sans-serif; text-transform: uppercase; letter-spacing: .19em; margin-top: 7px; color: var(--muted); }
+  .desktop-links { display: flex; align-items: center; gap: 28px; }
+  .desktop-links a { font-size: 12px; color: var(--muted); padding-block: 12px; }
+  .desktop-links a:hover { color: var(--accent); }
+  .nav-actions { display: flex; gap: 14px; align-items: center; }
+  .nav-cta { min-height: 42px; padding: 10px 20px; gap: 22px; font-size: 12px; }
+  .menu-button { display: none; align-items: center; justify-content: center; width: 40px; height: 40px; color: var(--ink); border: 1px solid var(--line); background: transparent; border-radius: 4px; }
+  .menu-button svg { width: 21px; height: 21px; }
+  .menu-cross { display: none; }
+  .menu-button[aria-expanded="true"] .menu-cross { display: block; }
+  .menu-button[aria-expanded="true"] .menu-lines { display: none; }
+  .mobile-menu { border-top: 1px solid var(--line); background: var(--paper); max-height: calc(100dvh - 78px); overflow-y: auto; }
+  .mobile-links { padding-block: 15px 26px; display: grid; }
+  .mobile-links a { display: flex; justify-content: space-between; padding-block: 14px; border-bottom: 1px solid var(--line); font-size: 16px; }
+  .mobile-links a span { color: var(--accent); }
+  @media (max-width: 1100px) { .desktop-links { display: none; } .menu-button { display: flex; } .nav-shell { min-height: 78px; } }
+  @media (max-width: 600px) { .nav-cta { display: none; } .nav-actions { gap: 7px; } .brand { gap: 8px; } .brand-name { font-size: 19px; } .brand-name small { font-size: 7px; letter-spacing: .12em; } .brand-mark { width: 32px; height: 35px; } .nav-shell { gap: 10px; } }
+  @media (max-width: 360px) {
+    .brand-name { font-size: 16px; }
+    .brand-mark { width: 27px; }
+    .nav-actions { gap: 2px; }
+    .menu-button { width: 34px; height: 36px; }
+    .nav-actions :global(#theme-toggle) { width: 29px; }
+    .nav-actions :global(.language-picker a) { width: 27px; }
+  }
+</style>

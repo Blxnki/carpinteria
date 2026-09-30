@@ -1,43 +1,96 @@
 ---
-import { getLangFromUrl, useTranslations } from "../i18n/utils";
-import { Image } from "astro:assets";
-import hammerImg from "../assets/images/carpinteria/hammer.jpg";
-
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+import { Image } from 'astro:assets';
+import pergola from '../assets/images/carpinteria/3.jpeg';
+import { getLangFromUrl } from '../i18n/utils';
+const es = getLangFromUrl(Astro.url) === 'es';
+const qualities = [
+  { title: es ? 'A tu medida' : 'Made for you', text: es ? 'Tu espacio, tu forma de vivir' : 'Your space, your way of living', icon: 'M4 4h16v16H4zM4 9h5V4M15 20v-5h5' },
+  { title: es ? 'Desde 1998' : 'Since 1998', text: es ? 'Un oficio que pasa de generación en generación' : 'A craft shared across generations', icon: 'M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1M5.6 18.4l2.1-2.1m8.6-8.6 2.1-2.1M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0' },
+  { title: es ? 'Hecho en Lanzarote' : 'Crafted in Lanzarote', text: es ? 'Cercanía en cada paso del proyecto' : 'A personal approach, every step of the way', icon: 'M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0ZM15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0' }
+];
 ---
-
-<section id="inicio" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-  <!-- Background Image with Dark Overlay -->
-  <div class="absolute inset-0 z-0 bg-stone-900">
-    <Image
-      src={hammerImg}
-      alt="Carpintería Rayco Caceres"
-      class="w-full h-full object-cover"
-      loading="eager"
-      fetchpriority="high"
-      format="webp"
-    />
-    <div class="absolute inset-0 bg-black/60 dark:bg-black/70"></div>
-  </div>
-
-  <div class="relative z-10 text-center max-w-3xl mx-auto p-6 md:p-8">
-    <span class="inline-block text-xs font-bold uppercase tracking-widest text-amber-400 mb-3 md:mb-4 drop-shadow-sm">
-      {lang === 'es' ? 'Alta Carpintería' : 'Premium Woodwork'}
-    </span>
-    <h1 class="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 text-white leading-tight drop-shadow-md">
-      {t('hero.title')}
-    </h1>
-    <p class="text-lg md:text-xl lg:text-2xl text-stone-200 max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow">
-      {t('hero.subtitle')}
-    </p>
-    <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-      <a href="#contacto" class="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white font-bold py-3.5 px-8 rounded-lg text-lg transition-transform duration-300 hover:scale-105 shadow-lg shadow-black/30">
-        {t('hero.cta')}
-      </a>
-      <a href="#servicios" class="w-full sm:w-auto border border-white/40 hover:border-white text-white hover:bg-white/10 font-bold py-3.5 px-8 rounded-lg text-lg transition-colors duration-300 backdrop-blur-sm">
-        {lang === 'es' ? 'Ver Servicios' : 'View Services'}
-      </a>
+<section id="inicio" class="hero">
+  <div class="shell hero-grid">
+    <div class="hero-copy">
+      <p class="hero-label"><span></span>{es ? 'Carpintería artesanal · Lanzarote' : 'Artisan carpentry · Lanzarote'}</p>
+      <h1>{es ? 'Madera con alma.' : 'Wood with soul.'}<br /><em>{es ? 'Espacios con' : 'Spaces with'}</em><br /><em>{es ? 'carácter.' : 'character.'}</em></h1>
+      <p class="hero-description">{es ? 'Damos forma a tus ideas con la calidez de la madera y el cuidado de un oficio. Muebles, puertas y pérgolas hechos para ti.' : 'We bring your ideas to life with the warmth of wood and the care of a craft. Furniture, doors and pergolas made for you.'}</p>
+      <div class="hero-actions">
+        <a class="button" href="#contacto">{es ? 'Cuéntanos tu proyecto' : 'Tell us about your project'}<span aria-hidden="true">↗</span></a>
+        <a class="text-link" href="#galeria">{es ? 'Explorar trabajos' : 'Explore our work'}<span aria-hidden="true">→</span></a>
+      </div>
+      <div class="hero-signature"><span class="signature-line"></span><span>Rayco Cáceres<small>{es ? 'Tradición familiar. Diseño a medida.' : 'Family tradition. Bespoke design.'}</small></span></div>
+    </div>
+    <div class="hero-visual">
+      <div class="image-topline"><span>01 / {es ? 'Madera que transforma' : 'Wood that transforms'}</span><span aria-hidden="true">↗</span></div>
+      <div class="hero-image-wrap">
+        <Image src={pergola} alt={es ? 'Pérgola artesanal de madera en un patio de Lanzarote, realizada por Rayco Cáceres' : 'Handcrafted wooden pergola in a Lanzarote patio, built by Rayco Cáceres'} widths={[480, 768, 1000, 1280]} sizes="(max-width: 800px) calc(100vw - 48px), (max-width: 1336px) 48vw, 600px" width={1000} height={900} format="webp" quality={78} loading="eager" fetchpriority="high" class="hero-image" />
+        <div class="experience-badge"><strong>25<span>+</span></strong><span>{es ? 'años dando vida' : 'years bringing'}<br />{es ? 'a tus ideas' : 'ideas to life'}</span></div>
+      </div>
+      <div class="image-caption"><span>{es ? 'Pérgolas y espacios exteriores' : 'Pergolas & outdoor spaces'}</span><span>{es ? 'Hecho a mano, pensado para durar.' : 'Handcrafted. Made to last.'}</span></div>
     </div>
   </div>
+  <div class="shell qualities">
+    {qualities.map(item => <div class="quality"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d={item.icon} /></svg><div><strong>{item.title}</strong><p>{item.text}</p></div></div>)}
+  </div>
 </section>
+<style>
+  .hero { padding-top: 32px; }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1.04fr; gap: 66px; align-items: center; padding-bottom: 55px; }
+  .hero-copy { padding-block: 24px; }
+  .hero-label { display: flex; align-items: center; gap: 9px; color: var(--accent); font-size: 10px; font-weight: 650; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 25px; }
+  .hero-label span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  h1 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(48px, 5.2vw, 76px); font-weight: 400; line-height: 1.05; letter-spacing: -.055em; margin: 0 0 25px; }
+  h1 em { font-weight: 400; color: var(--accent); }
+  .hero-description { max-width: 415px; color: var(--muted); font-size: 15px; line-height: 1.85; margin: 0 0 31px; }
+  .hero-actions { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .hero-actions .button { padding-inline: 21px; }
+  .hero-signature { display: flex; gap: 14px; align-items: center; margin-top: 34px; }
+  .signature-line { width: 32px; height: 1px; background: var(--accent); }
+  .hero-signature > span:last-child { font-family: Georgia, serif; font-style: italic; font-size: 20px; }
+  .hero-signature small { display: block; font: 10px 'Segoe UI', Arial, sans-serif; color: var(--muted); letter-spacing: .04em; margin-top: 4px; }
+  .image-topline { display: flex; justify-content: space-between; align-items: center; margin-bottom: 13px; font-size: 9px; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); }
+  .image-topline span:last-child { font-size: 19px; }
+  .hero-image-wrap { position: relative; }
+  .hero-image { width: 100%; height: 510px; object-fit: cover; object-position: 52% center; border-radius: 3px 3px 70px 3px; background: var(--tint); }
+  .experience-badge { position: absolute; bottom: 27px; left: -28px; display: flex; align-items: center; gap: 14px; padding: 17px 24px; background: #53624b; color: #fffefb; border: 5px solid var(--paper); border-radius: 3px; }
+  .experience-badge strong { font-family: Georgia, serif; font-size: 45px; font-weight: 400; line-height: 1; }
+  .experience-badge strong span { font-size: 22px; vertical-align: top; }
+  .experience-badge > span { font-size: 11px; line-height: 1.6; }
+  .image-caption { display: flex; justify-content: space-between; gap: 12px; font-size: 10px; color: var(--muted); padding-top: 14px; }
+  .image-caption span:first-child { color: var(--ink); }
+  .qualities { display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 34px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-block: 28px; }
+  .quality { display: flex; align-items: center; gap: 18px; }
+  .quality + .quality { border-left: 1px solid var(--line); padding-left: 34px; }
+  .quality svg { width: 29px; height: 29px; color: var(--accent); }
+  .quality strong { font-size: 12px; font-weight: 650; }
+  .quality p { font-size: 11px; color: var(--muted); margin: 4px 0 0; }
+  @media (min-width: 1600px) { .hero { padding-top: 52px; } .hero-image { height: 550px; } }
+  @media (max-width: 1100px) { .hero-grid { gap: 38px; } .hero-image { height: 480px; } .hero-actions { gap: 22px; } .qualities { gap: 24px; } .quality + .quality { padding-left: 24px; } }
+  @media (max-width: 800px) {
+    .hero { padding-top: 24px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 27px; padding-bottom: 38px; }
+    .hero-copy { padding-block: 12px 0; }
+    h1 { font-size: clamp(52px, 9vw, 76px); }
+    .hero-description { max-width: 520px; }
+    .hero-signature { display: none; }
+    .hero-image { height: 420px; }
+    .experience-badge { left: 18px; bottom: 20px; }
+    .qualities { grid-template-columns: 1fr; gap: 20px; padding-block: 26px; }
+    .quality + .quality { border-left: 0; padding-left: 0; }
+    .quality p { font-size: 12px; }
+  }
+  @media (max-width: 480px) {
+    .hero-label { font-size: 9px; letter-spacing: .12em; margin-bottom: 22px; }
+    h1 { font-size: clamp(43px, 11.8vw, 57px); }
+    .hero-description { font-size: 14px; margin-bottom: 25px; }
+    .hero-actions { gap: 20px; }
+    .hero-actions .button { font-size: 12px; padding-inline: 18px; }
+    .hero-actions .text-link { font-size: 12px; }
+    .hero-image { height: 320px; border-bottom-right-radius: 50px; }
+    .image-caption { font-size: 9px; }
+    .image-caption span:last-child { max-width: 120px; text-align: right; }
+    .experience-badge { padding: 13px 18px; }
+    .experience-badge strong { font-size: 38px; }
+  }
+</style>

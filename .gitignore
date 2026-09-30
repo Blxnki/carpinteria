@@ -5,6 +5,10 @@ dist/
 
 # dependencies
 node_modules/
+.npm-cache/
+
+# local previews
+preview-web*.jpg
 
 # logs
 npm-debug.log*

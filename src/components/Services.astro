@@ -1,31 +1,80 @@
 ---
 import { SERVICES_DATA } from "../data/services";
-import SectionTitle from "./ui/SectionTitle.astro";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const isEnglish = lang === "en";
+const serviceTitles: Record<string, string> = {
+  "services.muebles.title": isEnglish ? "Custom furniture" : "Muebles a medida",
+  "services.pergolas.title": isEnglish ? "Wood & aluminium pergolas" : "Pérgolas de madera y aluminio",
+  "services.asfaltica.title": isEnglish ? "Roof waterproofing" : "Impermeabilización de techos",
+};
+const icons = [
+  "M4 4h16v15H4z M4 10h16 M12 10v9 M7 7h1 M16 7h1 M8 14v2 M16 14v2 M6 19v2 M18 19v2",
+  "M4 10a8 8 0 1 1 1 8 M4 4v6h6 M9 15l6-6 M9 9l6 6",
+  "M5 21V3h14v18 M3 21h18 M8 21V6l8-2v17 M12 13h1",
+  "M3 7h18 M4 7V4h16v3 M5 7v14 M19 7v14 M8 4v3 M12 4v3 M16 4v3 M3 11h18",
+  "M3 11l9-7 9 7 M5 10v10h14V10 M12 10s-3 4-3 6a3 3 0 0 0 6 0c0-2-3-6-3-6z",
+];
 ---
 
-<section id="servicios" class="py-20 bg-stone-100 dark:bg-stone-900/50">
-  <div class="container mx-auto px-4">
-    <SectionTitle
-      title={t('services.title')}
-      subtitle={t('services.subtitle')}
-    />
+<section id="servicios" class="services section-pad" aria-labelledby="services-heading">
+  <div class="shell">
+    <div class="services-intro">
+      <div>
+        <p class="eyebrow">{t("services.title")}</p>
+        <h2 id="services-heading" class="section-heading">
+          {isEnglish ? "Made to measure." : "Hecho a medida."}<br />
+          <em>{isEnglish ? "Made for you." : "Pensado para ti."}</em>
+        </h2>
+      </div>
+      <p class="services-summary">{t("services.subtitle")}</p>
+    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 max-w-7xl mx-auto">
-      {SERVICES_DATA.map(service => (
-        <div class="bg-white dark:bg-stone-800 p-8 rounded-lg shadow-lg text-center transform transition-transform duration-300 hover:-translate-y-2 border border-transparent dark:border-stone-700/50">
-          <div class="bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-6">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" d={service.icon}></path>
+    <div class="services-grid">
+      {SERVICES_DATA.map((service, index) => (
+        <article class="service-card">
+          <div class="service-top">
+            <svg aria-hidden="true" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d={icons[index]} />
             </svg>
+            <span class="service-number">{String(index + 1).padStart(2, "0")}</span>
           </div>
-          <h3 class="text-xl font-bold mb-2 text-stone-900 dark:text-stone-100">{t(service.titleKey)}</h3>
-          <p class="text-stone-600 dark:text-stone-300">{t(service.descKey)}</p>
-        </div>
+          <h3>{serviceTitles[service.titleKey] ?? t(service.titleKey)}</h3>
+          <p>{t(service.descKey)}</p>
+        </article>
       ))}
     </div>
   </div>
 </section>
+
+<style>
+  .services { background: var(--paper); }
+  .services-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 48px; margin-bottom: 44px; }
+  .services-intro .section-heading { margin-bottom: 0; }
+  .section-heading em { font-weight: inherit; color: var(--accent); }
+  .services-summary { max-width: 350px; margin: 0 0 7px; color: var(--muted); line-height: 1.8; }
+  .services-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
+  .service-card { grid-column: span 2; padding: 30px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); transition: border-color 180ms ease, transform 180ms ease; }
+  .service-card:nth-last-child(-n + 2) { grid-column: span 3; }
+  .service-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .service-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; color: var(--accent); }
+  .service-number { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; letter-spacing: .08em; }
+  .service-card h3 { margin: 0 0 12px; color: var(--ink); font-size: 19px; font-weight: 600; line-height: 1.4; }
+  .service-card p { max-width: 410px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
+  @media (max-width: 900px) {
+    .services-intro { align-items: flex-start; flex-direction: column; gap: 20px; }
+    .services-summary { max-width: 560px; }
+    .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .service-card, .service-card:nth-last-child(-n + 2) { grid-column: auto; }
+    .service-card:last-child { grid-column: span 2; }
+  }
+  @media (max-width: 560px) {
+    .services-intro { margin-bottom: 30px; }
+    .services-grid { grid-template-columns: 1fr; gap: 12px; }
+    .service-card, .service-card:last-child { grid-column: auto; padding: 25px; }
+    .service-top { margin-bottom: 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .service-card { transition: none; } .service-card:hover { transform: none; } }
+</style>

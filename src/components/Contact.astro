@@ -1,49 +1,102 @@
 ---
 import { COMPANY_DATA } from "../data/company";
-import SectionTitle from "./ui/SectionTitle.astro";
-import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { getLangFromUrl } from "../i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+const isEnglish = lang === 'en';
+const phoneUrl = `tel:+34${COMPANY_DATA.phone.replace(/\D/g, '')}`;
+const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(COMPANY_DATA.address)}`;
+const quoteUrl = `mailto:${COMPANY_DATA.email}?subject=${encodeURIComponent(isEnglish ? 'My carpentry project' : 'Mi proyecto de carpintería')}`;
 ---
 
-<section id="contacto" class="py-20 bg-stone-100 dark:bg-stone-900/50">
-  <div class="container mx-auto px-4">
-    <SectionTitle
-      title={t('contact.title')}
-      subtitle={t('contact.subtitle')}
-    />
-
-    <div class="max-w-md mx-auto space-y-6">
-      <div class="bg-white dark:bg-stone-800 p-8 rounded-lg shadow-lg border border-transparent dark:border-stone-700/50 space-y-6">
-        <div class="flex items-start space-x-4">
-          <div class="bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold text-stone-900 dark:text-stone-100">{t('contact.info.address')}</h3>
-            <p class="text-stone-600 dark:text-stone-300">{COMPANY_DATA.address}</p>
-          </div>
-        </div>
-        <div class="flex items-start space-x-4">
-          <div class="bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold text-stone-900 dark:text-stone-100">{t('contact.info.phone')}</h3>
-            <a href={`tel:${COMPANY_DATA.phone}`} class="text-stone-600 dark:text-stone-300 hover:text-amber-600 dark:hover:text-amber-400">{COMPANY_DATA.phone}</a>
-          </div>
-        </div>
-        <div class="flex items-start space-x-4">
-          <div class="bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold text-stone-900 dark:text-stone-100">{t('contact.info.email')}</h3>
-            <a href={`mailto:${COMPANY_DATA.email}`} class="text-stone-600 dark:text-stone-300 hover:text-amber-600 dark:hover:text-amber-400">{COMPANY_DATA.email}</a>
-          </div>
-        </div>
+<section id="contacto" class="contact section-pad" aria-labelledby="contact-heading">
+  <div class="shell contact-panel">
+    <div class="contact-intro">
+      <p class="eyebrow">{isEnglish ? 'Let’s create something together' : 'Creemos algo juntos'}</p>
+      <h2 id="contact-heading" class="section-heading">
+        {isEnglish ? 'Your idea.' : 'Tu idea.'}<br />
+        <span>{isEnglish ? 'Our next project.' : 'Nuestro próximo proyecto.'}</span>
+      </h2>
+      <p class="contact-description">
+        {isEnglish
+          ? 'Tell us what you have in mind. We’ll help you find the right solution for your space, with the care that every piece deserves.'
+          : 'Cuéntanos qué tienes en mente. Te ayudamos a encontrar la solución para tu espacio, con el cuidado que merece cada pieza.'}
+      </p>
+      <div class="contact-actions">
+        <a class="button contact-quote" href={quoteUrl}>
+          {isEnglish ? 'Request a quote' : 'Pide tu presupuesto'}
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+        </a>
+        <a class="contact-call" href={phoneUrl}>{isEnglish ? 'Or call us' : 'O llámanos'}</a>
       </div>
+    </div>
+
+    <div class="contact-details">
+      <p class="contact-location">Arrecife, Lanzarote</p>
+      <dl>
+        <div class="contact-detail">
+          <dt>{isEnglish ? 'Phone' : 'Teléfono'}</dt>
+          <dd><a href={phoneUrl}>{COMPANY_DATA.phone}</a></dd>
+        </div>
+        <div class="contact-detail">
+          <dt>Email</dt>
+          <dd><a class="contact-email" href={`mailto:${COMPANY_DATA.email}`}>{COMPANY_DATA.email}</a></dd>
+        </div>
+        <div class="contact-detail">
+          <dt>{isEnglish ? 'Visit us' : 'Visítanos'}</dt>
+          <dd>
+            <a class="contact-address" href={mapUrl} target="_blank" rel="noopener noreferrer">
+              <span>{COMPANY_DATA.address}</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10" /></svg>
+            </a>
+          </dd>
+        </div>
+      </dl>
     </div>
   </div>
 </section>
+
+<style>
+  .contact { padding-bottom: 0; background: var(--paper); }
+  .contact-panel {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: clamp(40px, 6vw, 80px);
+    padding: clamp(32px, 5.4vw, 68px);
+    background: #303d2e;
+    color: #f7f5ef;
+  }
+  .contact-intro { min-width: 0; }
+  .contact .eyebrow { color: #c4cdb7; margin-bottom: 25px; }
+  .contact .section-heading { color: inherit; font-size: clamp(2.4rem, 4.4vw, 4.2rem); line-height: 1.1; letter-spacing: -.035em; }
+  .contact .section-heading span { color: #d4dacb; }
+  .contact-description { max-width: 460px; margin: 26px 0 32px; color: #d0d6c9; font-size: .98rem; line-height: 1.75; }
+  .contact-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 22px; }
+  .contact-quote { background: #f7f5ef; border-color: #f7f5ef; color: #303d2e; }
+  .contact-quote:hover { background: #e2e6d9; border-color: #e2e6d9; }
+  .contact-quote svg, .contact-address svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.5; flex: none; }
+  .contact-call { font-size: .9rem; text-underline-offset: 5px; text-decoration: underline; color: #f7f5ef; }
+  .contact-call:hover { color: #d4dacb; }
+  .contact-details { min-width: 0; align-self: center; border-left: 1px solid #64705d; padding-left: clamp(30px, 4.5vw, 56px); }
+  .contact-location { margin: 0 0 31px; font-size: .76rem; letter-spacing: .16em; text-transform: uppercase; color: #c4cdb7; }
+  .contact-details dl { margin: 0; }
+  .contact-detail + .contact-detail { margin-top: 28px; }
+  .contact-detail dt { color: #c4cdb7; font-size: .8rem; margin-bottom: 7px; }
+  .contact-detail dd { margin: 0; font-size: clamp(.95rem, 1.6vw, 1.08rem); line-height: 1.6; }
+  .contact-detail a { color: #f7f5ef; text-decoration: none; transition: color .2s ease; }
+  .contact-detail a:hover { color: #c4cdb7; text-decoration: underline; text-underline-offset: 4px; }
+  .contact-email { overflow-wrap: anywhere; }
+  .contact-address { display: flex; gap: 15px; align-items: flex-start; max-width: 330px; }
+  .contact-address svg { margin-top: 3px; }
+  .contact a:focus-visible { outline: 2px solid #f7f5ef; outline-offset: 5px; }
+  @media (max-width: 760px) {
+    .contact-panel { grid-template-columns: 1fr; gap: 38px; }
+    .contact-details { border-left: 0; border-top: 1px solid #64705d; padding: 31px 0 0; }
+    .contact-location { margin-bottom: 24px; }
+    .contact .section-heading { font-size: clamp(2.25rem, 7.5vw, 3.6rem); }
+  }
+  @media (max-width: 400px) {
+    .contact-panel { padding: 27px 24px; }
+    .contact-actions { align-items: flex-start; flex-direction: column; gap: 18px; }
+  }
+</style>

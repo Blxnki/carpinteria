@@ -4,72 +4,62 @@ import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import { getLangFromUrl } from '../i18n/utils';
-
-interface Props {
-	title?: string;
-	description?: string;
-	image?: string;
-}
-
-const {
-	title = SITE_TITLE,
-	description = SITE_DESCRIPTION,
-	image = '/images/og-image.png',
-} = Astro.props;
-
+import { getImage } from 'astro:assets';
+import pergola from '../assets/images/carpinteria/3.jpeg';
+interface Props { title?: string; description?: string; image?: string; }
 const lang = getLangFromUrl(Astro.url);
+const { title = lang === 'es' ? SITE_TITLE + ' · Carpintería en Lanzarote' : 'Rayco Cáceres · Bespoke Carpentry in Lanzarote', description = lang === 'es' ? SITE_DESCRIPTION : 'Family-run carpentry in Lanzarote since 1998. Bespoke furniture, doors, pergolas and restoration, crafted with care.', image } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImage = image || (await getImage({ src: pergola, width: 1200, height: 630, fit: 'cover', format: 'webp', quality: 80 })).src;
+const pagePairs: Record<string, [string, string]> = {
+  '/': ['/', '/en/'], '/en': ['/', '/en/'],
+  '/aviso-legal': ['/aviso-legal/', '/en/legal-notice/'],
+  '/en/legal-notice': ['/aviso-legal/', '/en/legal-notice/'],
+  '/politica-privacidad': ['/politica-privacidad/', '/en/privacy-policy/'],
+  '/en/privacy-policy': ['/politica-privacidad/', '/en/privacy-policy/'],
+};
+const pair = pagePairs[Astro.url.pathname.replace(/\/$/, '') || '/'];
 ---
-
 <!DOCTYPE html>
-<html lang={lang} class="scroll-smooth">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/png" href="/favicon.png" />
-		<meta name="generator" content={Astro.generator} />
-
-		<!-- SEO -->
-		<title>{title}</title>
-		<meta name="description" content={description} />
-		<link rel="canonical" href={canonicalURL} />
-
-		<!-- Open Graph / Facebook -->
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:url" content={canonicalURL} />
-		<meta property="og:image" content={new URL(image, Astro.site)} />
-		<meta property="og:site_name" content={SITE_TITLE} />
-		<meta property="og:type" content="website" />
-
-		<!-- Twitter -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={description} />
-		<meta name="twitter:image" content={new URL(image, Astro.site)} />
-
-		<!-- Theme Script: Executed immediately to prevent FOUC -->
-		<script is:inline>
-			const getTheme = () => {
-				if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-					return localStorage.getItem('theme');
-				}
-				return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-			};
-
-			const theme = getTheme();
-			if (theme === 'dark') {
-				document.documentElement.classList.add('dark');
-			} else {
-				document.documentElement.classList.remove('dark');
-			}
-		</script>
-	</head>
-	<body class="bg-stone-50 text-stone-900 dark:bg-stone-950 dark:text-stone-100 transition-colors duration-300 min-h-screen flex flex-col">
-		<Navbar />
-		<div class="flex-grow">
-			<slot />
-		</div>
-		<Footer />
-	</body>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#f7f5ef" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    {pair && <><link rel="alternate" hreflang="es" href={new URL(pair[0], Astro.site)} /><link rel="alternate" hreflang="en" href={new URL(pair[1], Astro.site)} /></>}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={new URL(socialImage, Astro.site)} />
+    <meta property="og:site_name" content={SITE_TITLE} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_GB'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(socialImage, Astro.site)} />
+    <script is:inline>
+      (() => {
+        let theme;
+        try { theme = localStorage.getItem('theme'); } catch {}
+        const dark = theme === 'dark' || (theme !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.toggle('dark', dark);
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">{lang === 'es' ? 'Saltar al contenido' : 'Skip to content'}</a>
+    <Navbar />
+    <div class="site-content"><slot /></div>
+    <Footer />
+  </body>
 </html>
+<style>
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  .site-content { flex: 1; }
+</style>

@@ -3,16 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="404: No Encontrado">
-  <div class="flex flex-col items-center justify-center text-center h-screen">
-    <h1 class="text-9xl font-bold text-amber-600">404</h1>
-    <p class="text-2xl md:text-3xl font-semibold text-stone-800 dark:text-stone-200 mt-4">
-      Página no encontrada
-    </p>
+  <main id="contenido" tabindex="-1" class="shell section-pad flex flex-col items-center justify-center text-center">
+    <p class="eyebrow">Error 404</p>
+    <h1 class="section-heading">Página no encontrada</h1>
     <p class="text-stone-600 dark:text-stone-400 mt-2 mb-8">
       Lo sentimos, la página que buscas no existe o ha sido movida.
     </p>
-    <a href="/" class="px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors">
+    <a href="/" class="button">
       Volver al Inicio
     </a>
-  </div>
+  </main>
 </BaseLayout>

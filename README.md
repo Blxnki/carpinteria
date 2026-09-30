@@ -1,43 +1,34 @@
-# Astro Starter Kit: Minimal
+# Carpintería Rayco Cáceres
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Web estática bilingüe (español e inglés) para una carpintería familiar en Lanzarote, creada con Astro 6 y Tailwind CSS 4.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Desarrollo
 
-## 🚀 Project Structure
+Requiere Node.js 22.12 o posterior.
 
-Inside of your Astro project, you'll see the following folders and files:
+- `npm ci`: instala las dependencias fijadas en el lockfile.
+- `npm run dev`: abre el servidor de desarrollo en http://localhost:4321.
+- `npm run build`: genera la web lista para publicar en `dist/`.
+- `npm run preview`: permite revisar la versión de producción.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## Contenido
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+- `src/data/company.ts`: nombre, teléfono, email y dirección.
+- `src/data/gallery.ts`: las 32 fotografías con títulos, categorías y descripciones en ambos idiomas.
+- `src/data/services.ts` y `src/i18n/ui.ts`: servicios y textos compartidos.
+- `src/data/testimonials.ts`: testimonios existentes.
+- `src/styles/global.css`: colores, tipografía y estilos compartidos.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Las páginas principales están en `/` y `/en/`. Cada idioma conserva sus páginas legales.
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Diseño y rendimiento
 
-## 🧞 Commands
+Las fotos se convierten a WebP durante el build y ofrecen tamaños adaptados a la pantalla. La portada tiene prioridad de carga; las imágenes inferiores se cargan de forma diferida. La galería muestra seis proyectos inicialmente y permite consultar las 32 fotografías con un visor nativo, flechas y Escape. Sin JavaScript, quedan disponibles los enlaces a todas las fotos.
 
-All commands are run from the root of the project, from a terminal:
+La web genera HTML estático y sólo usa JavaScript para el menú móvil, la elección de tema y la galería. Utiliza fuentes del sistema, sin peticiones a servicios de tipografía externos. Incluye modo oscuro, estilos para movimiento reducido y navegación por teclado.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Los botones de presupuesto abren el cliente de correo; las llamadas y la dirección usan enlaces directos al teléfono y Google Maps.
 
-## 👀 Want to learn more?
+## Publicación
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Configura el dominio real en `site` dentro de `astro.config.mjs` antes de publicar: el proyecto conserva el dominio de ejemplo original. Este valor se utiliza en el sitemap, los enlaces canónicos y las tarjetas para compartir. Publica el contenido de `dist/` en un alojamiento estático.
