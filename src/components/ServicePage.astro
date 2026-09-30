@@ -1,0 +1,117 @@
+---
+import { Image, getImage } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Contact from './Contact.astro';
+import { SERVICE_PAGES, type ServicePage } from '../data/service-pages';
+import { serviceRoutes } from '../i18n/routes';
+import { getLangFromUrl } from '../i18n/utils';
+
+interface Props { service: ServicePage; }
+const { service } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const es = lang === 'es';
+const copy = service[lang];
+const home = es ? '/' : '/en/';
+const url = new URL(serviceRoutes[service.key][lang], Astro.site).href;
+const socialImage = await getImage({ src: service.image, width: 1200, height: 630, fit: 'cover', format: 'webp', quality: 80 });
+const structuredData = [
+  {
+    '@type': 'Service', '@id': `${url}#service`, url,
+    name: copy.heading, description: copy.description,
+    provider: { '@id': new URL('/#business', Astro.site).href },
+    areaServed: { '@type': 'Place', name: 'Lanzarote' },
+  },
+  {
+    '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: es ? 'Inicio' : 'Home', item: new URL(home, Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: copy.label, item: url },
+    ],
+  },
+];
+---
+<BaseLayout title={copy.title} description={copy.description} image={socialImage.src} structuredData={structuredData}>
+  <main id="contenido" tabindex="-1">
+    <div class="shell">
+      <nav class="breadcrumbs" aria-label={es ? 'Ruta de navegación' : 'Breadcrumb'}>
+        <a href={home}>{es ? 'Inicio' : 'Home'}</a><span aria-hidden="true">/</span><span aria-current="page">{copy.label}</span>
+      </nav>
+      <section class="service-hero" aria-labelledby="service-title">
+        <div>
+          <p class="eyebrow">{es ? 'Rayco Cáceres · Taller en Arrecife' : 'Rayco Cáceres · Workshop in Arrecife'}</p>
+          <h1 id="service-title">{copy.heading}</h1>
+          <p class="service-intro">{copy.intro}</p>
+          <a class="button" href="#contacto">{es ? 'Consultar mi proyecto' : 'Discuss my project'}<span aria-hidden="true">↗</span></a>
+        </div>
+        <figure class="hero-photo">
+          <Image src={service.image} alt={copy.imageAlt} widths={[480, 768, 1100]} sizes="(max-width: 800px) calc(100vw - 48px), 46vw" width={880} height={880} format="webp" quality={78} loading="eager" fetchpriority="high" />
+          <figcaption>{es ? 'De nuestra galería de trabajos' : 'From our project gallery'}</figcaption>
+        </figure>
+      </section>
+      <div class="service-details section-pad">
+        <div class="service-story">
+          {copy.sections.map(section => <section><h2>{section.heading}</h2><p>{section.text}</p></section>)}
+          <a class="text-link" href={`${home}#galeria`}>{es ? 'Explorar todos los trabajos' : 'Explore all our projects'}<span aria-hidden="true">→</span></a>
+        </div>
+        <aside class="project-notes" aria-labelledby="notes-title">
+          <Image src={service.detailImage} alt={copy.detailAlt} widths={[400, 700]} sizes="(max-width: 800px) calc(100vw - 80px), 32vw" width={700} height={550} format="webp" quality={78} loading="lazy" />
+          <div>
+            <p class="eyebrow">{es ? 'Empecemos por tu idea' : 'Let’s start with your idea'}</p>
+            <h2 id="notes-title">{es ? 'Qué puedes enviarnos' : 'What to share with us'}</h2>
+            <ul>{copy.checklist.map(item => <li>{item}</li>)}</ul>
+          </div>
+        </aside>
+      </div>
+      <section class="service-faq section-pad" aria-labelledby="faq-title">
+        <div><p class="eyebrow">{es ? 'Antes de empezar' : 'Before we begin'}</p><h2 class="section-heading" id="faq-title">{es ? 'Preguntas frecuentes' : 'Your questions'}</h2></div>
+        <div>{copy.faqs.map(faq => <details><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</div>
+      </section>
+      <nav class="related-services" aria-label={es ? 'Otros servicios de carpintería' : 'More carpentry services'}>
+        <p class="eyebrow">{es ? 'También podemos ayudarte con' : 'We can also help with'}</p>
+        <div>{SERVICE_PAGES.filter(item => item.key !== service.key).map(item => <a href={serviceRoutes[item.key][lang]}>{item[lang].label}<span aria-hidden="true">↗</span></a>)}</div>
+      </nav>
+    </div>
+    <Contact />
+  </main>
+</BaseLayout>
+<style>
+  .breadcrumbs { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 28px; color: var(--muted); font-size: 12px; }
+  .breadcrumbs a:hover { text-decoration: underline; }
+  .service-hero { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 68px; padding: 36px 0 64px; border-bottom: 1px solid var(--line); }
+  h1 { margin: 20px 0 26px; font: 400 clamp(42px, 4.5vw, 64px)/1.08 Georgia, serif; letter-spacing: -.045em; text-wrap: balance; }
+  .service-intro { color: var(--muted); margin: 0 0 30px; max-width: 540px; }
+  figure { margin: 0; }
+  .hero-photo img { width: 100%; height: 470px; object-fit: cover; border-radius: 4px 4px 60px 4px; }
+  figcaption { margin-top: 12px; font-size: 11px; color: var(--muted); }
+  .service-details { display: grid; grid-template-columns: 1.4fr 1fr; gap: 88px; align-items: start; }
+  .service-story section + section { margin-top: 34px; }
+  .service-story h2, .project-notes h2 { margin: 0 0 14px; font: 400 29px/1.2 Georgia, serif; letter-spacing: -.025em; }
+  .service-story p { margin: 0; color: var(--muted); }
+  .service-story .text-link { margin-top: 28px; }
+  .project-notes { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+  .project-notes img { width: 100%; height: 300px; object-fit: cover; }
+  .project-notes > div { padding: 28px; }
+  .project-notes .eyebrow { margin: 0 0 16px; }
+  .project-notes h2 { font-size: 26px; }
+  .project-notes ul { margin: 20px 0 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+  .project-notes li + li { margin-top: 10px; }
+  .service-faq { border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1.4fr; gap: 68px; }
+  .service-faq .eyebrow { margin-top: 0; }
+  details { border-bottom: 1px solid var(--line); padding: 20px 0; }
+  details:first-child { padding-top: 0; }
+  summary { cursor: pointer; font-weight: 600; font-size: 16px; padding-right: 12px; }
+  details p { color: var(--muted); margin: 14px 0 0; font-size: 15px; }
+  .related-services { padding-bottom: 72px; }
+  .related-services > div { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .related-services a { display: flex; justify-content: space-between; gap: 15px; padding: 22px; border: 1px solid var(--line); border-radius: 4px; }
+  .related-services a:hover { background: var(--tint); border-color: var(--accent); }
+  @media (max-width: 1000px) { .service-hero, .service-details, .service-faq { gap: 36px; } .hero-photo img { height: 400px; } }
+  @media (max-width: 800px) {
+    .service-hero, .service-details, .service-faq { grid-template-columns: 1fr; }
+    .service-hero { padding-top: 28px; padding-bottom: 40px; }
+    .hero-photo img { height: 380px; }
+    .service-details { gap: 40px; }
+    .project-notes { max-width: 560px; }
+    .related-services { padding-bottom: 52px; }
+  }
+  @media (max-width: 480px) { h1 { font-size: 43px; } .hero-photo img { height: 330px; } .related-services > div { grid-template-columns: 1fr; } }
+</style>

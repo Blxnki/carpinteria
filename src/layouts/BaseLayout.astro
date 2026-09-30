@@ -6,19 +6,34 @@ import Footer from '../components/Footer.astro';
 import { getLangFromUrl } from '../i18n/utils';
 import { getImage } from 'astro:assets';
 import pergola from '../assets/images/carpinteria/3.jpeg';
-interface Props { title?: string; description?: string; image?: string; }
+import { COMPANY_DATA } from '../data/company';
+import { getLocalizedRoutes } from '../i18n/routes';
+interface Props { title?: string; description?: string; image?: string; noindex?: boolean; structuredData?: Record<string, unknown>[]; }
 const lang = getLangFromUrl(Astro.url);
-const { title = lang === 'es' ? SITE_TITLE + ' · Carpintería en Lanzarote' : 'Rayco Cáceres · Bespoke Carpentry in Lanzarote', description = lang === 'es' ? SITE_DESCRIPTION : 'Family-run carpentry in Lanzarote since 1998. Bespoke furniture, doors, pergolas and restoration, crafted with care.', image } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const { title = lang === 'es' ? 'Carpintería de madera en Lanzarote | Rayco Cáceres' : 'Bespoke Carpentry in Lanzarote | Rayco Cáceres', description = lang === 'es' ? SITE_DESCRIPTION : 'Family-run carpentry in Lanzarote with a workshop in Arrecife. Bespoke furniture and wardrobes, wooden doors, pergolas and restoration. Tell us about your project.', image, noindex = false, structuredData = [] } = Astro.props;
+const pair = getLocalizedRoutes(Astro.url.pathname);
+const canonicalURL = new URL(pair?.[lang] || Astro.url.pathname, Astro.site);
 const socialImage = image || (await getImage({ src: pergola, width: 1200, height: 630, fit: 'cover', format: 'webp', quality: 80 })).src;
-const pagePairs: Record<string, [string, string]> = {
-  '/': ['/', '/en/'], '/en': ['/', '/en/'],
-  '/aviso-legal': ['/aviso-legal/', '/en/legal-notice/'],
-  '/en/legal-notice': ['/aviso-legal/', '/en/legal-notice/'],
-  '/politica-privacidad': ['/politica-privacidad/', '/en/privacy-policy/'],
-  '/en/privacy-policy': ['/politica-privacidad/', '/en/privacy-policy/'],
+const siteURL = new URL('/', Astro.site).href;
+const business = {
+  '@type': 'HomeAndConstructionBusiness',
+  '@id': `${siteURL}#business`,
+  name: COMPANY_DATA.businessName,
+  url: siteURL,
+  image: new URL(socialImage, Astro.site).href,
+  telephone: `+34${COMPANY_DATA.phone.replace(/\s/g, '')}`,
+  email: COMPANY_DATA.email,
+  address: { '@type': 'PostalAddress', ...COMPANY_DATA.postalAddress },
+  geo: COMPANY_DATA.geo,
+  openingHoursSpecification: [COMPANY_DATA.openingHoursSpecification],
+  areaServed: { '@type': 'Place', name: 'Lanzarote' },
+  hasMap: COMPANY_DATA.googleMaps,
+  sameAs: [...Object.values(COMPANY_DATA.social), COMPANY_DATA.googleMaps],
 };
-const pair = pagePairs[Astro.url.pathname.replace(/\/$/, '') || '/'];
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [business, { '@type': 'WebSite', '@id': `${siteURL}#website`, url: siteURL, name: SITE_TITLE, inLanguage: ['es', 'en'], publisher: { '@id': business['@id'] } }, ...structuredData],
+};
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -28,10 +43,12 @@ const pair = pagePairs[Astro.url.pathname.replace(/\/$/, '') || '/'];
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#f7f5ef" />
+    <meta name="google-site-verification" content="i4GZcpFhIGjOdvX295WjPnSYOrP6nZoBofg5LMaoxDE" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalURL} />
-    {pair && <><link rel="alternate" hreflang="es" href={new URL(pair[0], Astro.site)} /><link rel="alternate" hreflang="en" href={new URL(pair[1], Astro.site)} /></>}
+    {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonicalURL} />}
+    {!noindex && pair && <><link rel="alternate" hreflang="es" href={new URL(pair.es, Astro.site)} /><link rel="alternate" hreflang="en" href={new URL(pair.en, Astro.site)} /><link rel="alternate" hreflang="x-default" href={new URL(pair.es, Astro.site)} /></>}
+    {!noindex && <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />

@@ -1,78 +1,31 @@
 ---
-import { TESTIMONIALS_DATA } from "../data/testimonials";
-import { getLangFromUrl, useTranslations } from "../i18n/utils";
-
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const isEnglish = lang === "en";
-const englishReviews = [
-  {
-    role: "Private client",
-    testimonial: "The living room furniture they created for me is simply perfect. They understood my idea right away, and the quality is outstanding. Highly recommended!",
-  },
-  {
-    role: "Interior designer",
-    testimonial: "I work with them on many of my projects. Their professionalism, attention to detail and skill with wood are exceptional. They always deliver.",
-  },
-  {
-    role: "Private client",
-    testimonial: "They restored my grandmother's chest of drawers, and the result is spectacular. They preserved its character, but it now looks like new. Impeccable work.",
-  },
-];
+import { COMPANY_DATA } from '../data/company';
+import { getLangFromUrl } from '../i18n/utils';
+const es = getLangFromUrl(Astro.url) === 'es';
 ---
-
-<section id="testimonios" class="testimonials section-pad" aria-labelledby="testimonials-heading">
-  <div class="shell">
-    <div class="testimonials-heading">
-      <p class="eyebrow">{isEnglish ? "In their words" : "En sus palabras"}</p>
-      <h2 id="testimonials-heading" class="section-heading">{t("testimonials.title")}</h2>
-      <p>{t("testimonials.subtitle")}</p>
+<section id="testimonios" class="reviews section-pad" aria-labelledby="reviews-heading">
+  <div class="shell reviews-grid">
+    <div>
+      <p class="eyebrow">{es ? 'Experiencias compartidas' : 'Shared experiences'}</p>
+      <h2 id="reviews-heading" class="section-heading">{es ? 'Nuestros clientes' : 'Our customers'}<br /><em>{es ? 'tienen la palabra.' : 'tell the story.'}</em></h2>
     </div>
-    <div class="testimonials-grid">
-      {TESTIMONIALS_DATA.map((testimonial, index) => (
-        <figure class="testimonial">
-          <div class="testimonial-stars" role="img" aria-label={isEnglish ? `${testimonial.rating} out of 5 stars` : `${testimonial.rating} de 5 estrellas`}>
-            {Array.from({ length: 5 }).map((_, starIndex) => (
-              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 20 20" fill={starIndex < testimonial.rating ? "currentColor" : "none"} stroke="currentColor" stroke-width="1">
-                <path d="m10 1.8 2.5 5.1 5.6.8-4.1 4 1 5.6-5-2.6-5 2.6 1-5.6-4.1-4 5.6-.8z" />
-              </svg>
-            ))}
-          </div>
-          <blockquote><p>“{isEnglish ? englishReviews[index].testimonial : testimonial.testimonial}”</p></blockquote>
-          <figcaption>
-            <span class="testimonial-initials" aria-hidden="true">{testimonial.name.split(" ").map((part) => part[0]).join("")}</span>
-            <div><strong>{testimonial.name}</strong><span>{isEnglish ? englishReviews[index].role : testimonial.role}</span></div>
-          </figcaption>
-        </figure>
-      ))}
+    <div class="reviews-card">
+      <span class="review-source">Google Maps</span>
+      <h3>{COMPANY_DATA.businessName}</h3>
+      <p>{es ? 'Lee las opiniones de nuestros clientes y consulta sus experiencias en nuestra ficha de Google. Allí encontrarás las reseñas y la valoración actualizadas.' : 'Read our customers’ experiences on our Google business profile, where you can find the latest reviews and rating.'}</p>
+      <a class="button-outline" href={COMPANY_DATA.googleMaps} target="_blank" rel="noopener noreferrer" aria-label={es ? 'Ver opiniones en Google (se abre en una pestaña nueva)' : 'Read reviews on Google (opens in a new tab)'}>{es ? 'Ver opiniones en Google' : 'Read reviews on Google'}<span aria-hidden="true">↗</span></a>
+      <p class="review-invitation">{es ? '¿Hemos trabajado juntos? Puedes compartir tu experiencia en nuestra ficha. Tu opinión nos ayuda a mejorar.' : 'Have we worked together? You can share your experience on our profile. Your feedback helps us improve.'}</p>
     </div>
   </div>
 </section>
-
 <style>
-  .testimonials { background: var(--paper); }
-  .testimonials-heading { max-width: 700px; margin: 0 auto 48px; text-align: center; }
-  .testimonials-heading .section-heading { margin-bottom: 18px; }
-  .testimonials-heading > p:last-child { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.8; }
-  .testimonials-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .testimonial { display: flex; flex-direction: column; margin: 0; padding: 8px 32px; border-right: 1px solid var(--line); }
-  .testimonial:first-child { padding-left: 0; }
-  .testimonial:last-child { padding-right: 0; border-right: 0; }
-  .testimonial-stars { display: flex; gap: 4px; color: var(--accent); margin-bottom: 22px; }
-  blockquote { margin: 0 0 28px; }
-  blockquote p { margin: 0; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 21px; line-height: 1.65; }
-  figcaption { display: flex; align-items: center; gap: 13px; margin-top: auto; }
-  .testimonial-initials { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; color: var(--accent); background: var(--surface); border: 1px solid var(--line); border-radius: 50%; font-size: 12px; letter-spacing: .02em; }
-  figcaption strong { display: block; color: var(--ink); font-size: 13px; font-weight: 600; }
-  figcaption div > span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
-  @media (max-width: 900px) { .testimonial { padding: 8px 22px; } blockquote p { font-size: 19px; } }
-  @media (max-width: 760px) {
-    .testimonials-heading { text-align: left; margin-bottom: 32px; }
-    .testimonials-grid { grid-template-columns: 1fr; }
-    .testimonial, .testimonial:first-child, .testimonial:last-child { padding: 28px 0; border-right: 0; border-bottom: 1px solid var(--line); }
-    .testimonial:first-child { padding-top: 0; }
-    .testimonial:last-child { padding-bottom: 0; border-bottom: 0; }
-    blockquote { margin-bottom: 22px; }
-    blockquote p { font-size: 22px; }
-  }
+  .reviews { background: var(--paper); }
+  .reviews-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+  .section-heading em { color: var(--accent); font-weight: inherit; }
+  .reviews-card { border: 1px solid var(--line); border-radius: 5px; padding: 34px; background: var(--surface); }
+  .review-source { color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: .03em; }
+  h3 { margin: 12px 0; font-size: 19px; font-weight: 600; }
+  .reviews-card p { margin: 0 0 24px; color: var(--muted); font-size: 15px; line-height: 1.8; }
+  .reviews-card .review-invitation { margin: 22px 0 0; font-size: 12px; }
+  @media (max-width: 800px) { .reviews-grid { grid-template-columns: 1fr; gap: 24px; } .reviews-card { padding: 26px; } .section-heading { margin-bottom: 0; } }
 </style>

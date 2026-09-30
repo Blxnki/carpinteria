@@ -2,6 +2,8 @@
 import { COMPANY_DATA } from '../data/company';
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
 import SocialLinks from './SocialLinks.astro';
+import { SERVICE_PAGES } from '../data/service-pages';
+import { serviceRoutes } from '../i18n/routes';
 
 const lang = getLangFromUrl(Astro.url);
 const isEnglish = lang === 'en';
@@ -27,6 +29,9 @@ const currentYear = new Date().getFullYear();
         <a href={`${home}#contacto`}>{isEnglish ? 'Contact' : 'Contacto'}</a>
       </nav>
     </div>
+    <nav class="footer-services" aria-label={isEnglish ? 'Carpentry services in Lanzarote' : 'Servicios de carpintería en Lanzarote'}>
+      {SERVICE_PAGES.map(service => <a href={serviceRoutes[service.key][lang]}>{service[lang].label}</a>)}
+    </nav>
     <div class="footer-bottom">
       <p>&copy; {currentYear} {COMPANY_DATA.name}. {t('footer.rights')}</p>
       <nav class="footer-legal" aria-label={isEnglish ? 'Legal information' : 'Información legal'}>
@@ -51,6 +56,8 @@ const currentYear = new Date().getFullYear();
   .footer-navigation a:hover, .footer-legal a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 5px; }
   .footer-bottom { border-top: 1px solid var(--line); padding-top: 24px; display: flex; align-items: baseline; justify-content: space-between; gap: 20px; color: var(--muted); font-size: .72rem; line-height: 1.7; }
   .footer-bottom p { margin: 0; }
+  .footer-services { display: flex; flex-wrap: wrap; gap: 15px 28px; padding-bottom: 28px; color: var(--muted); font-size: 12px; }
+  .footer-services a:hover { color: var(--accent); text-decoration: underline; }
   .footer-legal { gap: 23px; }
   .footer-legal a { color: var(--muted); }
   .footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }

@@ -1,10 +1,16 @@
 ---
 import { SERVICES_DATA } from "../data/services";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { serviceRoutes } from '../i18n/routes';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const isEnglish = lang === "en";
+const serviceLinks: Record<string, { href: string; label: string }> = {
+  'services.muebles.title': { href: serviceRoutes.furniture[lang], label: isEnglish ? 'Explore bespoke furniture' : 'Ver muebles y armarios' },
+  'services.pergolas.title': { href: serviceRoutes.pergolas[lang], label: isEnglish ? 'Explore pergolas' : 'Ver pérgolas' },
+  'services.instalaciones.title': { href: serviceRoutes.doors[lang], label: isEnglish ? 'Explore wooden doors' : 'Ver puertas de madera' },
+};
 const serviceTitles: Record<string, string> = {
   "services.muebles.title": isEnglish ? "Custom furniture" : "Muebles a medida",
   "services.pergolas.title": isEnglish ? "Wood & aluminium pergolas" : "Pérgolas de madera y aluminio",
@@ -43,6 +49,7 @@ const icons = [
           </div>
           <h3>{serviceTitles[service.titleKey] ?? t(service.titleKey)}</h3>
           <p>{t(service.descKey)}</p>
+          {serviceLinks[service.titleKey] && <a class="text-link service-link" href={serviceLinks[service.titleKey].href}>{serviceLinks[service.titleKey].label}<span aria-hidden="true">→</span></a>}
         </article>
       ))}
     </div>
@@ -63,6 +70,8 @@ const icons = [
   .service-number { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; letter-spacing: .08em; }
   .service-card h3 { margin: 0 0 12px; color: var(--ink); font-size: 19px; font-weight: 600; line-height: 1.4; }
   .service-card p { max-width: 410px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
+  .service-link { margin-top: 22px; color: var(--accent); }
+  .service-link:hover { text-decoration: underline; text-underline-offset: 4px; }
   @media (max-width: 900px) {
     .services-intro { align-items: flex-start; flex-direction: column; gap: 20px; }
     .services-summary { max-width: 560px; }

@@ -6,7 +6,7 @@ import SocialLinks from './SocialLinks.astro';
 const lang = getLangFromUrl(Astro.url);
 const isEnglish = lang === 'en';
 const phoneUrl = `tel:+34${COMPANY_DATA.phone.replace(/\D/g, '')}`;
-const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(COMPANY_DATA.address)}`;
+const mapUrl = COMPANY_DATA.googleMaps;
 const quoteUrl = `mailto:${COMPANY_DATA.email}?subject=${encodeURIComponent(isEnglish ? 'My carpentry project' : 'Mi proyecto de carpintería')}`;
 ---
 
@@ -51,6 +51,10 @@ const quoteUrl = `mailto:${COMPANY_DATA.email}?subject=${encodeURIComponent(isEn
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10" /></svg>
             </a>
           </dd>
+        </div>
+        <div class="contact-detail">
+          <dt>{isEnglish ? 'Opening hours' : 'Horario'}</dt>
+          <dd>{COMPANY_DATA.openingHours[lang]}</dd>
         </div>
       </dl>
       <div class="contact-social">
