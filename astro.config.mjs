@@ -4,7 +4,8 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://carpinteria-ejemplo.com',
+  site: 'https://carpinteriaraycocaceres.com',
+  compressHTML: true,
   i18n: {
     defaultLocale: 'es',
     locales: ['es', 'en'],
