@@ -4,7 +4,8 @@ export const COMPANY_DATA = {
   email: 'Carpinteriacaceresinfo@gmail.com',
   address: 'C. de Jesús Soto Morales, 18, 35500 Arrecife, Las Palmas',
   social: {
-    instagram: 'https://instagram.com/carpinteria_tradicional',
-    facebook: 'https://facebook.com/carpinteria_tradicional',
+    facebook: 'https://www.facebook.com/carpinteriacaceres.lanzarote/',
+    instagram: 'https://www.instagram.com/carpinteria_madera_caceres_/',
+    tiktok: 'https://www.tiktok.com/@raycocaceres',
   }
 };

@@ -1,6 +1,7 @@
 ---
 import { COMPANY_DATA } from "../data/company";
 import { getLangFromUrl } from "../i18n/utils";
+import SocialLinks from './SocialLinks.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const isEnglish = lang === 'en';
@@ -52,6 +53,10 @@ const quoteUrl = `mailto:${COMPANY_DATA.email}?subject=${encodeURIComponent(isEn
           </dd>
         </div>
       </dl>
+      <div class="contact-social">
+        <p>{isEnglish ? 'Follow our latest work' : 'Sigue nuestros últimos trabajos'}</p>
+        <SocialLinks light />
+      </div>
     </div>
   </div>
 </section>
@@ -88,6 +93,8 @@ const quoteUrl = `mailto:${COMPANY_DATA.email}?subject=${encodeURIComponent(isEn
   .contact-email { overflow-wrap: anywhere; }
   .contact-address { display: flex; gap: 15px; align-items: flex-start; max-width: 330px; }
   .contact-address svg { margin-top: 3px; }
+  .contact-social { margin-top: 30px; padding-top: 24px; border-top: 1px solid #64705d; }
+  .contact-social p { margin: 0 0 12px; color: #c4cdb7; font-size: .8rem; }
   .contact a:focus-visible { outline: 2px solid #f7f5ef; outline-offset: 5px; }
   @media (max-width: 760px) {
     .contact-panel { grid-template-columns: 1fr; gap: 38px; }

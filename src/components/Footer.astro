@@ -1,6 +1,7 @@
 ---
 import { COMPANY_DATA } from '../data/company';
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import SocialLinks from './SocialLinks.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const isEnglish = lang === 'en';
@@ -12,10 +13,13 @@ const currentYear = new Date().getFullYear();
 <footer class="footer">
   <div class="shell">
     <div class="footer-main">
-      <a class="footer-brand" href={`${home}#inicio`} aria-label={COMPANY_DATA.name}>
-        <span class="footer-wordmark">Rayco Cáceres<span class="brand-dot">.</span></span>
-        <span class="footer-tagline">{isEnglish ? 'Carpentry in Lanzarote' : 'Carpintería en Lanzarote'}</span>
-      </a>
+      <div class="footer-identity">
+        <a class="footer-brand" href={`${home}#inicio`} aria-label={COMPANY_DATA.name}>
+          <span class="footer-wordmark">Rayco Cáceres<span class="brand-dot">.</span></span>
+          <span class="footer-tagline">{isEnglish ? 'Carpentry in Lanzarote' : 'Carpintería en Lanzarote'}</span>
+        </a>
+        <SocialLinks />
+      </div>
       <nav class="footer-navigation" aria-label={isEnglish ? 'Footer navigation' : 'Navegación del pie de página'}>
         <a href={`${home}#servicios`}>{isEnglish ? 'Services' : 'Servicios'}</a>
         <a href={`${home}#galeria`}>{isEnglish ? 'Projects' : 'Proyectos'}</a>
@@ -36,6 +40,7 @@ const currentYear = new Date().getFullYear();
 <style>
   .footer { background: var(--paper); color: var(--ink); padding: 62px 0 26px; }
   .footer-main { display: flex; align-items: center; justify-content: space-between; gap: 32px; padding-bottom: 42px; }
+  .footer-identity { display: grid; gap: 22px; min-width: 0; }
   .footer-brand { display: inline-flex; flex-direction: column; gap: 9px; text-decoration: none; color: var(--ink); }
   .footer-wordmark { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.8rem, 3vw, 2.2rem); letter-spacing: -.055em; line-height: 1; }
   .brand-dot { color: var(--accent); }
